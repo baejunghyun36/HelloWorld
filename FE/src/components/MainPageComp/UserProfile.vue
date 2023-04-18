@@ -13,10 +13,12 @@
                 <option v-for="(item, index) in selectList" :key="index" :value="item.value">{{ item.name }}</option>
             </select>
             <div class="edit-and-history">
+                <router-link to="/modify-user">
                 <div class="edit-btn">
                     <div class="blue-arrow">▶</div>
                     <div class="edit">EDIT</div>
                 </div>
+            </router-link>
                 <div class="history-btn">
                     <div class="blue-arrow">▶ </div>
                     <div class="history">HISTORY</div>
@@ -47,6 +49,10 @@ export default {
 </script>
 
 <style scoped>
+a {
+    text-decoration: none;
+    color: black;
+}
 .wrap {
     margin-top: 3vh;
 }

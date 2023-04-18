@@ -8,6 +8,7 @@ import RegisterUser from '@/views/UserView/register/RegisterUser.vue'
 import PasswordSearch from '@/views/UserView/findpw/FindPassword.vue'
 import MainPage from '@/views/MainPage.vue'
 import RegisterCharacter from '@/views/UserView/register/RegisterCharacter.vue'
+import ModifyUser from '@/views/UserView/modify/ModifyUser.vue'
 
 const routes = [
   {
@@ -48,6 +49,11 @@ const routes = [
     path: "/guestbook",
     component: GuestBookListView,
   },
+  {
+    path: "/modify-user",
+    name: "modify-user",
+    component: ModifyUser,
+  }
 ];
 
 const router = createRouter({
