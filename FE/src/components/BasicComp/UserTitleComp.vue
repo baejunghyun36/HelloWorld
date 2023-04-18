@@ -1,7 +1,6 @@
 <template>
-    <div>
-        <p id = "username">김싸피</p>
-        <p>님의 미니홈피</p>
+    <div class="wrap">
+        <div id="username">김싸피 님의 미니홈피</div>
     </div>
 </template>
 
@@ -9,19 +8,15 @@
 </script>
 
 <style scoped>
-    div {
-        font-size : 1.5rem;
-        font-weight : normal;
-        color : #82ACC1;
-        display: flex;
-        margin: 0 0 0 1vw;
-    }
-    p {
-        margin: 0;
-        padding : 0 0 1vh 0.5vw;
-    }
-    #username {
-        padding-left : 1vw;
-        font-weight:bolder;
-    }
+.wrap {
+    display: flex;
+}
+
+#username {
+    padding-left: 1vw;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 22px;
+    color: #499DC6;
+}
 </style>
