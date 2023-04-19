@@ -2,6 +2,7 @@
     <div class="dashed-border">
         <div class="grey-bg">
             <UserProfile />
+            <UserInfo />
         </div>
 
     </div>
@@ -9,8 +10,9 @@
 
 <script>
 import UserProfile from "@/components/MainPageComp/UserProfile.vue"
+import UserInfo from "@/components/UserComp/UserInfo.vue"
 export default {
-    components: { UserProfile},
+    components: { UserProfile, UserInfo},
 };
 </script>
 

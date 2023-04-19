@@ -26,14 +26,10 @@
                                         src="@/assets/image/Person.png" alt="스토리" /></div>
                                 <div class="story-element-container"><img class="story-element"
                                         src="@/assets/image/Person.png" alt="스토리" /></div>
-                                <div class="story-element-container"><img class="story-element"
-                                        src="@/assets/image/Person.png" alt="스토리" /></div>
                             </div>
                         </splide-slide>
                         <splide-slide class="splide-slide">
                             <div class="one-slide">
-                                <div class="story-element-container"><img class="story-element"
-                                        src="@/assets/image/Person.png" alt="스토리" /></div>
                                 <div class="story-element-container"><img class="story-element"
                                         src="@/assets/image/Person.png" alt="스토리" /></div>
                                 <div class="story-element-container"><img class="story-element"
@@ -122,7 +118,7 @@
                 </div>
                 <div class="comment-input-container">
                     <div class="author-name">김싸피 (나)</div>
-                    <input class="comment-input" />
+                    <input class="comment-input" placeholder="일촌평을 등록해보세요"/>
                     <div class="comment-post-btn">
                         등록
                     </div>
@@ -137,6 +133,7 @@
 
 <script>
 import UserTitleComp from "@/components/BasicComp/UserTitleComp.vue"
+
 export default {
     components: { UserTitleComp },
     data() {
@@ -161,14 +158,14 @@ export default {
 
 </script>
 
-<style>
+<style scoped>
 .blank {
     height: 23px;
 }
 
 .right-body {
     background-color: white;
-    width: 67vw;
+    width: 62vw;
     height: 75vh;
     border: 1px solid #6A6A6A;
     border-radius: 15px;
@@ -206,6 +203,12 @@ export default {
     width: 50px;
     height: 50px;
     object-fit: fill;
+    cursor: pointer;
+}
+
+.story-element-container:hover {
+    transform: scale(1.1);
+    transition: 0.5s;
 }
 
 .grass-container {
@@ -293,6 +296,10 @@ export default {
     width: 100%;
 }
 
+.comment-input::placeholder {
+    color: #A5A5A5;
+}
+
 .author-name {
     width: 11%;
     color: #82ACC1;
@@ -319,14 +326,14 @@ export default {
 
 .comment-post-btn {
     margin-left: 10px;
-    background-color: #F8F8F8;
+    background-color: #F9F9F9;
     color: #6A6A6A;
     font-size: 10px;
-    padding: 1px 2px;
+    padding: 1px 6px;
     zoom: 0.8;
     border-radius: 3px;
     font-weight: 600;
-    box-shadow: 0.3px 0.7px #8C8C8C;
+    box-shadow: 1px 0.8px #8C8C8C;
     cursor: pointer;
 }
 

@@ -3,6 +3,7 @@
         <div class="grey-bg">
             <UserProfile />
             <MiniHomepage />
+            <CategoryNav />
         </div>
 
     </div>
@@ -11,8 +12,9 @@
 <script>
 import UserProfile from "@/components/MainPageComp/UserProfile.vue"
 import MiniHomepage from "@/components/MainPageComp/MiniHompage.vue"
+import CategoryNav from "@/components/BasicComp/CategoryNav.vue"
 export default {
-    components: { UserProfile, MiniHomepage},
+    components: { UserProfile, MiniHomepage, CategoryNav },
 };
 </script>
 

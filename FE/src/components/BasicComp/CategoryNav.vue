@@ -22,6 +22,12 @@
 </script>
 
 <style scoped>
+a {
+    text-decoration: none;
+    font-size: 10px;
+    color: white;
+    border: 1px solid #499DC6;
+}
     #category {
         height: 78vh;
     }
