@@ -5,6 +5,7 @@
         <div style="font-size:10px; padding-right : 0.5vw"> | </div>
         <div style="font-size:10px">TOTAL</div>
         <div id="total">123123</div>
+
     </div>
 </template>
 
