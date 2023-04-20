@@ -275,6 +275,11 @@ export default {
     cursor: pointer;
 }
 
+.comment-author:hover {
+    text-decoration: underline;
+    text-decoration-color: #D9D9D9;
+}
+
 .comment-content {
     width: 70%;
     color: #6A6A6A;

@@ -2,7 +2,7 @@
     <nav id = "category">
         <ul>
             <li class="navitem">
-                <router-link to="/" class="nav-link">홈</router-link>
+                <router-link to="/mainpage" class="nav-link">홈</router-link>
             </li>
             <li class="navitem">
                 <router-link to="/boardlist" class="nav-link">게시글</router-link>

@@ -11,7 +11,7 @@
                 </div>
             </div>
             <ModalView>
-                
+
             </ModalView>
             <div class="user-info-whole-container">
                 <div class="user-info-container">
@@ -87,7 +87,7 @@ export default {
 
 .right-body {
     background-color: white;
-    width: 67vw;
+    width: 62vw;
     height: 75vh;
     border: 1px solid #6A6A6A;
     border-radius: 15px;

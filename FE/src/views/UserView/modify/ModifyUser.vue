@@ -3,6 +3,7 @@
         <div class="grey-bg">
             <UserProfile />
             <UserInfo />
+            <CategoryNav />
         </div>
 
     </div>
@@ -11,8 +12,9 @@
 <script>
 import UserProfile from "@/components/MainPageComp/UserProfile.vue"
 import UserInfo from "@/components/UserComp/UserInfo.vue"
+import CategoryNav from "@/components/BasicComp/CategoryNav.vue"
 export default {
-    components: { UserProfile, UserInfo},
+    components: { UserProfile, UserInfo, CategoryNav },
 };
 </script>
 
