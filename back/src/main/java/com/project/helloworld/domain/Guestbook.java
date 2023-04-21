@@ -1,16 +1,10 @@
 package com.project.helloworld.domain;
 
 import com.project.helloworld.util.BaseTimeEntity;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+
+import lombok.*;
 
 
 @Entity
@@ -27,6 +21,7 @@ public class Guestbook extends BaseTimeEntity {
   private Long guestbookSeq;
 
   @Column(name = "content")
+  @Setter
   private String content;
 
   @Column(name = "guestbook_user_seq")
@@ -35,7 +30,11 @@ public class Guestbook extends BaseTimeEntity {
   @Column(name = "guestbook_nickname")
   private String guestbookNickname;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_seq", nullable = false)
+  private User user;
 
-
-
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "avatar_seq")
+  private Avatar avatar;
 }
