@@ -37,18 +37,25 @@ public class FamilyServiceImpl implements FamilyService {
         return new ResponseEntity<>(familyResponseDtos,HttpStatus.OK);
     }
 
+    // 일촌 요청을 보내!!!
+    // 반대도 저장
     @Override
     public ResponseEntity<?> requestFamily(Long userSeq, Long toUserSeq) throws Exception {
         User user = userRepository.findById(userSeq).orElseThrow(() -> new Exception("not exist user : " + userSeq));
-        Family family = Family.builder().user(user).familyUserSeq(toUserSeq).
+        Family family = Family.builder().relationName("from-> to 일촌명").user(user).familyUserSeq(toUserSeq).
                 build();
         familyRepository.save(family);
+        // 반대방향도 저장
+        User userReverse = userRepository.findById(toUserSeq).orElseThrow(() -> new Exception("not exist user: " + toUserSeq));
+        Family familyReverse = Family.builder().relationName("to -> from 일촌명").user(userReverse).familyUserSeq(userSeq).build();
+        familyRepository.save(familyReverse);
         MessageResponse messageResponse = MessageResponse.builder().message("요청을 보냈습니다.").build();
         return ResponseEntity.ok().body(messageResponse);
     }
 
     @Override
     public ResponseEntity<?> acceptFamily(Long familySeq) throws Exception {
+        // 정방향 수락
         Family family = familyRepository.findById(familySeq).orElseThrow(() -> new Exception("not exist family relation : "+familySeq));
         Family newFamily = family.builder().familySeq(family.getFamilySeq())
                 .relationName(family.getRelationName()).relationComment(family.getRelationComment())
@@ -56,6 +63,15 @@ public class FamilyServiceImpl implements FamilyService {
                 .user(family.getUser())
                 .build();
         familyRepository.save(newFamily);
+        // 반대 방향도 수락 해야지 familySeq 구한다음
+        Long familySeqReverse = familyRepository.findByUsers(family.getFamilyUserSeq(),family.getUser().getUserSeq());
+        // 그다음 진행
+        Family familyReverse = familyRepository.findById(familySeqReverse).orElseThrow(() -> new Exception("not exist family relation : "+family.getFamilyUserSeq()));
+        Family newFamilyReverse = family.builder().familySeq(familyReverse.getFamilySeq())
+                        .relationName(familyReverse.getRelationName()).relationComment(familyReverse.getRelationComment())
+                .familyUserSeq(familyReverse.getFamilyUserSeq()).relationComment(familyReverse.getRelationComment())
+                .user(family.getUser())
+                .build();
         MessageResponse messageResponse = MessageResponse.builder().message("일촌 수락 하셨습니다.").build();
 
         return ResponseEntity.ok().body(messageResponse);
@@ -63,8 +79,12 @@ public class FamilyServiceImpl implements FamilyService {
 
     @Override
     public ResponseEntity<?> deleteFamily(Long familySeq) throws Exception {
-
+        Family family = familyRepository.findById(familySeq).orElseThrow(() ->new Exception("not exist family relation : "+familySeq));
+        Long familySeqReverse = familyRepository.findByUsers(family.getFamilyUserSeq(),family.getUser().getUserSeq());
+        // 정방향
         familyRepository.deleteById(familySeq);
+        // 역방향
+        familyRepository.deleteById(familySeqReverse);
         MessageResponse messageResponse = MessageResponse.builder().message("일촌이 끊어졌습니다.").build();
         return ResponseEntity.ok().body(messageResponse);
     }
