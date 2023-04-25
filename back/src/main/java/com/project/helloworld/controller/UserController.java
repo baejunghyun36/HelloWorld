@@ -45,7 +45,7 @@ public class UserController {
         return userService.reissue(reissue);
     }
 
-    @ApiOperation(value = "회원정보 조회", notes = "token")
+    @ApiOperation(value = "회원정보 조회", notes = "userSeq")
     @GetMapping("/userInfo/{userSeq}")
     public ResponseEntity<?> getUserInfo(@Validated @PathVariable Long userSeq) throws Exception{
         log.debug("tokenInfo", userSeq);

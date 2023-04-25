@@ -14,12 +14,12 @@ public class CertificationDto {
 
     private final StringRedisTemplate stringRedisTemplate;
 
-    public void createCertification(String userInfo, String certificationNumber) { // 사용자가 입력한 휴대폰 번호와 인증번호를 저장하고 TTL을 180초로 설정
+    public void createCertification(String userInfo, String certificationNumber) { // 사용자가 입력한 정보와 인증 내용을 저장하고 TTL을 180초로 설정
         stringRedisTemplate.opsForValue()
                 .set(PREFIX + userInfo, certificationNumber, Duration.ofSeconds(LIMIT_TIME));
     }
 
-    public String getCertification(String userInfo) { // Redis에서 휴대폰번호(KEY)에 해당하는 인증번호를 리턴
+    public String getCertification(String userInfo) { // Redis에서 인증KEY에 해당하는 인증 메세지를 리턴
         return stringRedisTemplate.opsForValue().get(PREFIX + userInfo);
     }
 
@@ -27,7 +27,7 @@ public class CertificationDto {
         stringRedisTemplate.delete(PREFIX + userInfo);
     }
 
-    public boolean hasKey(String userInfo) {  // Redis에 해당 휴대폰번호(KEY)로 저장된 인증번호(VALUE)가 존재하는지 확인
+    public boolean hasKey(String userInfo) {  // Redis에 해당 KEY로 저장된 인증 메세지(VALUE)가 존재하는지 확인
         return stringRedisTemplate.hasKey(PREFIX + userInfo);
     }
 }
