@@ -37,10 +37,10 @@ export default {
         }
     },
     methods: {
-        dateDetail: function(e) {
+        dateDetail: async function(e) {
             e.preventDefault();
             this.date = e.target.id;
-            this.detailBoardList = e.target.getAttribute("boardList").split(",");
+            this.detailBoardList = await e.target.getAttribute("boardList").split(",");
             console.log(this.detailBoardList);
             this.showModal = true;
         }
