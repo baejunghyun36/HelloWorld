@@ -1,6 +1,8 @@
 package com.project.helloworld.controller;
 
 import com.project.helloworld.dto.request.FamilyCommentBody;
+import com.project.helloworld.dto.request.FamilyNameBody;
+import com.project.helloworld.dto.request.FamilyRequestBody;
 import com.project.helloworld.security.jwt.JwtTokenProvider;
 import com.project.helloworld.service.FamilyService;
 import lombok.RequiredArgsConstructor;
@@ -20,29 +22,35 @@ public class familyController {
 
     // 일촌 조회
     @GetMapping("")
-      ResponseEntity<?> getFamily(@RequestHeader("Authorization") String token) throws Exception {
+      ResponseEntity<?> getFamilies(@RequestParam("userSeq") Long userSeq,@RequestParam("status") String status,@RequestParam("hasComment") Boolean hasComment) throws Exception {
+//        @RequestHeader("Authorization") String token
 //        Long userSeq = jwtTokenProvider.getUserSeq(token);
-        Long userSeq = 1L;
-        return ResponseEntity.ok().body(familyService.getFamily(userSeq));
+
+        return ResponseEntity.ok().body(familyService.getFamilies(userSeq,status,hasComment));
     }
 
-    // 일촌요청
-    @PostMapping("")
-    ResponseEntity<?> requestFamily(@RequestHeader("Authorization") String token, @RequestParam("toUserSeq") Long toUserSeq) throws Exception {
 
-        // Long fromUserSeq = jwtTokenProvider.getUserSeq(token);
-        Long fromUserSeq = 1L;
-        return ResponseEntity.ok().body(familyService.requestFamily(fromUserSeq,toUserSeq));
+
+
+    @PostMapping("")
+    ResponseEntity<?> requestFamily(@RequestBody FamilyRequestBody familyRequestBody) throws Exception {
+//        @RequestHeader("Authorization") String token
+//         Long fromUserSeq = jwtTokenProvider.getUserSeq(token);
+
+        return ResponseEntity.ok().body(familyService.requestFamily(familyRequestBody.getFromUserSeq(),familyRequestBody.getToUserSeq(),familyRequestBody.getFromRelationName(),familyRequestBody.getToRelationName(),familyRequestBody.getRequestMessage()));
     }
 
     //일촌 수락
     @PutMapping("")
-    ResponseEntity<?> acceptFamily(@RequestHeader("Authorization") String token, @RequestParam("familySeq") Long familySeq) throws Exception {
+    ResponseEntity<?> acceptFamily( @RequestParam("familySeq") Long familySeq) throws Exception {
+
+//        @RequestHeader("Authorization") String token,
         return ResponseEntity.ok().body(familyService.acceptFamily(familySeq));
     }
     // 일촌 거절
     @DeleteMapping("")
-    ResponseEntity<?> deleteFamily(@RequestHeader("Authorization") String token, @RequestParam("familySeq") Long familySeq) throws Exception{
+    ResponseEntity<?> deleteFamily( @RequestParam("familySeq") Long familySeq) throws Exception{
+//        @RequestHeader("Authorization") String token,
         return ResponseEntity.ok().body(familyService.deleteFamily(familySeq));
     }
 
@@ -50,18 +58,25 @@ public class familyController {
     // 일촌평 수정
     // 일촌평 삭제
     @PutMapping("/comment")
-    ResponseEntity<?> updateFamilyComment(@RequestHeader("Authorization") String token , @RequestBody FamilyCommentBody familyCommentBody) throws Exception {
-        return ResponseEntity.ok().body(familyService.updateFamilyComment(familyCommentBody));
+    ResponseEntity<?> updateFamilyRelationComment( @RequestBody FamilyCommentBody familyCommentBody) throws Exception {
+//        @RequestHeader("Authorization") String token ,
+        return ResponseEntity.ok().body(familyService.updateFamilyRelationComment(familyCommentBody));
     }
 
-    // 일촌평 조회
-    @GetMapping("/comment")
-    ResponseEntity<?> getFamilyComment(@RequestHeader("Authorization") String token) throws Exception{
-
-        //        Long userSeq = jwtTokenProvider.getUserSeq(token);
-        Long userSeq = 1L;
-        return ResponseEntity.ok().body(familyService.getFamilyComment(userSeq));
+    @PutMapping("/name")
+    ResponseEntity<?> updateFamilyRelationName(@RequestBody FamilyNameBody familyNameBody) throws Exception {
+        return ResponseEntity.ok().body(familyService.updateFamilyRelationName(familyNameBody));
     }
+
+    // 일촌평 조회 (얘는 사실 필요 없을 듯?)
+//    @GetMapping("/comment")
+//    ResponseEntity<?> getFamilyComment(@RequestParam("userSeq") Long userSeq) throws Exception{
+//
+////        @RequestHeader("Authorization") String token
+//        //        Long userSeq = jwtTokenProvider.getUserSeq(token);
+//
+//        return ResponseEntity.ok().body(familyService.getFamilyComment(userSeq));
+//    }
 
 
 

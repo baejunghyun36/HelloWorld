@@ -8,17 +8,27 @@ import lombok.NoArgsConstructor;
 @Data
 public class FamilyResponseDto {
 
-    private Long userSeq;
 
 
-    private String nickname;
+    private String relationName;
+
+    private String relationComment;
+
+    private Long familyUserSeq;
+
+
+
+
+    private Integer isAccepted;
 
 
 
     public FamilyResponseDto(Family family) {
-        this.userSeq = family.getFamilyUserSeq();
-        System.out.println("아아아"+family.getFamilyUserNickname());
-        this.nickname = family.getFamilyUserNickname();
+
+        this.relationName = family.getRelationName();
+        this.relationComment = family.getRelationComment();
+        this.familyUserSeq = family.getFamilyUserSeq();
+        this.isAccepted = family.getIsAccepted();
 
     }
 }
