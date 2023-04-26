@@ -1,8 +1,8 @@
 <template>
     <div style="width: 100%">
         <div class="my-post"># 내 포스팅</div>
-        <div style="width: 75%; height: 73%;">
-            <apexchart class="my-post-chart" :options="options" :series="series" :labels="labels">
+        <div style="width: 80%; height: 70%;">
+            <apexchart class="my-post-chart" width="100%" height="100%" :options="options" :series="series" :labels="labels">
             </apexchart>
         </div>
     </div>

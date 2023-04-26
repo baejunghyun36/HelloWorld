@@ -6,9 +6,10 @@
 
 <script>
 import VueApexCharts from "vue3-apexcharts";
+
 export default {
     components: {
-        apexchart: VueApexCharts,
+        apexchart: VueApexCharts,  
     },
     data() {
         return {
@@ -75,7 +76,7 @@ export default {
 .weekly-today {
     text-align: start;
     color: #6A6A6A;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
     margin-left: 3%;
     margin-top: 2%;
