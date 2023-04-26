@@ -7,7 +7,7 @@
                 <CategoryNav />
             </div>
         </div>
-
+        <ChatBot />
     </div>
 </template>
 
@@ -15,12 +15,13 @@
 import UserProfile from "@/components/MainPageComp/UserProfile.vue"
 import MiniHomepage from "@/components/MainPageComp/MiniHompage.vue"
 import CategoryNav from "@/components/BasicComp/CategoryNav.vue"
+import ChatBot from "@/components/BasicComp/ChatBot.vue"
 // import http from "@/api/http";
 import axios from "axios"
 import 'url-search-params-polyfill';
 
 export default {
-    components: { UserProfile, MiniHomepage, CategoryNav },
+    components: { UserProfile, MiniHomepage, CategoryNav, ChatBot },
     methods: {
         isLogined: async function () {
             const url = new URL(window.location.href)
@@ -55,13 +56,19 @@ export default {
             }
             )
             console.log(response2);
-            console.log(response2.data.login+" 계정으로 로그인 성공!!!!!!!")
-            console.log(response2.avatar_url)
+            console.log(response2.data.login + " 계정으로 로그인 성공!!!!!!!")
         }
     },
     mounted() {
         this.isLogined();
-    }
+    },
+    // created() {
+    //     (function () { var w = window; if (w.ChannelIO) { return w.console.error("ChannelIO script included twice."); } var ch = function () { ch.c(arguments); }; ch.q = []; ch.c = function (args) { ch.q.push(args); }; w.ChannelIO = ch; function l() { if (w.ChannelIOInitialized) { return; } w.ChannelIOInitialized = true; var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js"; var x = document.getElementsByTagName("script")[0]; if (x.parentNode) { x.parentNode.insertBefore(s, x); } } if (document.readyState === "complete") { l(); } else { w.addEventListener("DOMContentLoaded", l); w.addEventListener("load", l); } })();
+
+    //     window.ChannelIO('boot', {
+    //         "pluginKey": "acbc3cce-55f3-4812-89d5-823845c119bd"
+    //     });
+    // }
 };
 </script>
 

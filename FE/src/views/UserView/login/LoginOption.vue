@@ -10,7 +10,7 @@ export default {
     //   console.error(error);
 
     // }
-    window.location.assign("https://github.com/login/oauth/authorize?client_id=67e5f9075db550de602e");
+    window.location.assign("https://github.com/login/oauth/authorize?client_id=fe942148c52dc4632d30");
     }
 }
 }
