@@ -85,4 +85,11 @@ public class UserRequestDto {
         @NotEmpty(message = "refreshToken을 입력해야 합니다.")
         private String refreshToken;
     }
+
+    @Getter
+    @Setter
+    public static class OauthSignIn{
+        private String email;
+        private String password;
+    }
 }
