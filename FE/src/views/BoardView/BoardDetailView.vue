@@ -1,9 +1,9 @@
 <template>
     <div id = "line">
         <div id = "Board">
-            <UserProfile />
+            <BoardNav @categorySelected="onCategorySelected"/>
             <div id = "MainBoard">
-                <GuestBookComp/>
+                <BoardDetailComp/>
                 <CategoryNav/>
             </div>
         </div>
@@ -11,11 +11,16 @@
 </template>
 
 <script>
-import UserProfile from "@/components/MainPageComp/UserProfile.vue";
-import GuestBookComp from "@/components/GuestBookComp/GuestBookComp.vue";
+import BoardNav from "@/components/BoardComp/BoardNav.vue";
+import BoardDetailComp from "@/components/BoardComp/BoardDetailComp.vue";
 import CategoryNav from "@/components/BasicComp/CategoryNav.vue";
 export default {
-    components : { UserProfile, GuestBookComp, CategoryNav },
+    components : { BoardNav, BoardDetailComp, CategoryNav},
+    methods : {
+        onCateogrySelected(category) {
+            console.log('Selected category: ', category);
+        }
+    }
 };
 </script>
 

@@ -1,9 +1,9 @@
 <template>
     <div id = "line">
         <div id = "Board">
-            <UserProfile />
+            <BoardNav />
             <div id = "MainBoard">
-                <GuestBookComp/>
+                <BoardCreateComp/>
                 <CategoryNav/>
             </div>
         </div>
@@ -11,11 +11,11 @@
 </template>
 
 <script>
-import UserProfile from "@/components/MainPageComp/UserProfile.vue";
-import GuestBookComp from "@/components/GuestBookComp/GuestBookComp.vue";
+import BoardNav from "@/components/BoardComp/BoardNav.vue";
+import BoardCreateComp from "@/components/BoardComp/BoardCreateComp.vue";
 import CategoryNav from "@/components/BasicComp/CategoryNav.vue";
 export default {
-    components : { UserProfile, GuestBookComp, CategoryNav },
+    components : { BoardNav, BoardCreateComp, CategoryNav},
 };
 </script>
 
@@ -41,6 +41,7 @@ export default {
         background-color: #F0F0F0;
         border-radius: 10px;
     }
+
     #MainBoard{
         display : flex;
         align-items: center;

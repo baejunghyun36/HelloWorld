@@ -11,7 +11,7 @@
                 <router-link to="/guestbook" class="nav-link">방명록</router-link>
             </li>
             <li class="navitem">
-                <router-link to="/statistics" class="nav-link">통계</router-link>
+                <router-link to="/statistic" class="nav-link">통계</router-link>
             </li>
         </ul>
     </nav>
@@ -31,6 +31,7 @@ a {
 }
     #category {
         height: 72vh;
+        margin-top : 4rem;
     }
 
     ul {
