@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
-import BoardListView from "../views/BoardList.vue";
-import BoardCreateView from "../views/BoardCreateView.vue";
-import BoardDetailView from "../views/BoardDetailView.vue";
+import BoardListView from "../views/BoardView/BoardList.vue";
+import BoardCreateView from "../views/BoardView/BoardCreateView.vue";
+import BoardDetailView from "../views/BoardView/BoardDetailView.vue";
 import GuestBookListView from "../views/GuestBookList.vue";
 import LogIn from '@/views/UserView/login/LogIn.vue'
 import LoginOption from '@/views/UserView/login/LoginOption.vue'

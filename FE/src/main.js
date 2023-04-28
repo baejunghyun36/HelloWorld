@@ -5,6 +5,8 @@ import VueSplide from "@splidejs/vue-splide";
 import VueApexCharts from "vue3-apexcharts";
 import { plugin as VueTippy } from "vue-tippy";
 import "tippy.js/dist/tippy.css";
+import timeago from 'vue-timeago3';
+import { ko } from 'date-fns/locale';
 
 //createApp(App).mount('#app')
 
@@ -12,6 +14,16 @@ const app = createApp(App);
 app.use(router);
 app.use(VueSplide);
 app.use(VueApexCharts);
+const timeagoOptions = {
+    converterOptions: {
+        includeSeconds : true,
+    },
+    locale: ko,
+}
+
+app.use(router)
+app.use(VueSplide)
+app.use(VueApexCharts)
 app.use(
   VueTippy,
   // optional
@@ -26,4 +38,6 @@ app.use(
   }
 );
 // app.component('apexChart', VueApexChart)
-app.mount("#app");
+
+app.use(timeago, timeagoOptions)
+app.mount("#app")
