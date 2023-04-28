@@ -60,7 +60,8 @@ public class UserRequestDto {
     @Setter
     public static class ChangePassword{
         private Long userSeq;
-        private String password;
+        private String originPassword;
+        private String changePassword;
     }
 
     @Getter
