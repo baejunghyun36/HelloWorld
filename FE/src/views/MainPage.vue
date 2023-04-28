@@ -7,21 +7,25 @@
                 <CategoryNav />
             </div>
         </div>
-        <ChatBot />
     </div>
+    <!-- <audio controls autoplay loop> -->
+    <!-- <source src="http://soundbible.com/mp3/Air Plane Ding-SoundBible.com-496729130.mp3" type="audio/mp3"> -->
+    
+    <!-- <source src="http://www.youtube.com/v/EkRuV-h6Bv0?" type="audio/mp3"> -->
+    <!-- 이 문장은 사용자의 웹 브라우저가 audio 요소를 지원하지 않을 때 나타납니다! -->
+    <!-- </audio> -->
 </template>
 
 <script>
 import UserProfile from "@/components/MainPageComp/UserProfile.vue"
 import MiniHomepage from "@/components/MainPageComp/MiniHompage.vue"
 import CategoryNav from "@/components/BasicComp/CategoryNav.vue"
-import ChatBot from "@/components/BasicComp/ChatBot.vue"
 // import http from "@/api/http";
 import axios from "axios"
 import 'url-search-params-polyfill';
 
 export default {
-    components: { UserProfile, MiniHomepage, CategoryNav, ChatBot },
+    components: { UserProfile, MiniHomepage, CategoryNav, },
     methods: {
         isLogined: async function () {
             const url = new URL(window.location.href)
@@ -91,5 +95,4 @@ export default {
     background-color: #F0F0F0;
     border-radius: 10px;
     display: flex;
-}
-</style>
+}</style>
