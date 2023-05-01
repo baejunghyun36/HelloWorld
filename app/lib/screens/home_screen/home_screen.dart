@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:app/widgets/common/footer.dart';
 import 'package:app/widgets/common/header.dart';
+import 'package:app/widgets/home_widget/grass_widget.dart';
+import 'package:app/widgets/home_widget/room_widget.dart';
 import 'package:flutter/services.dart';
 
 class Home extends StatefulWidget {
@@ -11,6 +13,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
   @override
   Widget build(BuildContext context) {
     // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.bottom]);
@@ -20,7 +23,15 @@ class _HomeState extends State<Home> {
         children: [
           Header(),
           Expanded(
-            child: Text('여기에 미니홈피'),
+            child: Column(
+              children: [
+                // 방
+                MyRoom(),
+                // 잔디
+                Grass(),
+
+              ],
+            ),
           ),
           Footer(),
         ],

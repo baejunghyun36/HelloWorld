@@ -60,7 +60,7 @@
                 <FamilyComment />
             </div>
             <div class="room-container">
-                <img class="room" src="@/assets/image/MiniRoom.png"/>
+                <img class="room" src="@/assets/image/background/background1.png"/>
             </div>
         </div>
     </div>
@@ -146,7 +146,7 @@ export default {
 }
 
 .story-element-container:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
     transition: 0.5s;
 }
 

@@ -28,7 +28,7 @@ Future<dynamic> apiInstance({
   // 기본 headers
   Map<String, String> headers = {
     "Content-Type": "application/json;charset=utf-8",
-    "accessToken": "$accessToken",
+    'Authorization': 'Bearer $accessToken',
   };
 
   // response 값

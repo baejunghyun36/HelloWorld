@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:app/widgets/logo_widget/logo_widget.dart';
 
 class Header extends StatefulWidget {
   const Header({Key? key}) : super(key: key);
@@ -18,8 +17,82 @@ class _HeaderState extends State<Header> {
       // color: Theme.of(context).primaryColorLight,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          Container(
+            margin: EdgeInsets.only(
+              left: 10,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'TODAY',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.normal,
+                          color: Theme.of(context).secondaryHeaderColor,
+                        ),
+                      ),
+                      TextSpan(
+                        text: ' 1234',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: Theme.of(context).disabledColor,
+                        ),
+                      ),
+                      TextSpan(
+                        text: '  |  TOTAL',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.normal,
+                          color: Theme.of(context).secondaryHeaderColor,
+                        ),
+                      ),
+                      TextSpan(
+                        text: ' 9999',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: Theme.of(context).secondaryHeaderColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 3,
+                ),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: '원송희 ',
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColorLight,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      TextSpan(
+                        text: ' 님의 미니홈피 ',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.normal,
+                          color: Theme.of(context).secondaryHeaderColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
           TextButton(
             onPressed: mvNotice,
             child: Icon(
