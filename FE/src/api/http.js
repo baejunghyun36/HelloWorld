@@ -5,5 +5,6 @@ export default axios.create({
   baseURL: "https://k8a308.p.ssafy.io/api",
   headers: {
     "Content-Type": "application/json",
+    Authorization: `Bearer ${localStorage.getItem("access-token")}`,
   },
 });
