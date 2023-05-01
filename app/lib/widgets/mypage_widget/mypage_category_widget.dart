@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:app/services/my_page_api.dart';
 
 class MyPageCategory extends StatefulWidget {
   final String category;
@@ -22,7 +23,7 @@ String convertCategoryNameToKor(CategoryName name) {
     case CategoryName.MyFamily: return "일촌 보기";
     case CategoryName.NoticeSetting: return "알림 설정";
     case CategoryName.Logout: return "로그아웃";
-    case CategoryName.Resign: return "회원 정보 초기화";
+    case CategoryName.Resign: return "회원 탈퇴하기";
   }
 }
 
@@ -250,6 +251,23 @@ class _MyPageCategoryState extends State<MyPageCategory> {
           ),
         ),
       ),
+    );
+  }
+
+  resign() {
+    deleteUserInfo(
+      success: (dynamic response) {},
+      fail: (error) {
+        print('사용자 정보 초기화 오류: $error');
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/error',
+          arguments: {
+            'errorText': error,
+          },
+          ModalRoute.withName('/home'),
+        );
+      },
     );
   }
 }

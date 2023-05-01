@@ -16,6 +16,7 @@ class _NoticeState extends State<Notice> {
       color: Colors.white,
       child: Column(
         children: [
+          SizedBox(height: 20,),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,

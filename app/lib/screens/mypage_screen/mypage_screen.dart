@@ -117,7 +117,7 @@ class _MyPageState extends State<MyPage> {
                     category: "로그아웃",
                     textColor: Theme.of(context).secondaryHeaderColor),
                 MyPageCategory(
-                    category: "회원 정보 초기화",
+                    category: "회원 탈퇴하기",
                     textColor: Theme.of(context).disabledColor),
               ],
             ),

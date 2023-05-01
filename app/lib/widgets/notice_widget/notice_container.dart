@@ -39,8 +39,7 @@ class _NoticeContainerState extends State<NoticeContainer> {
             ),
             decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage(
-                      'assets/images/no_image.jpg'),
+                  image: AssetImage('assets/images/no_image.jpg'),
                   fit: BoxFit.cover,
                 ),
                 borderRadius: BorderRadius.circular(100),
@@ -49,12 +48,15 @@ class _NoticeContainerState extends State<NoticeContainer> {
                         .secondaryHeaderColor
                         .withOpacity(0.3))),
           ),
+          SizedBox(
+            width: 5,
+          ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "원송희 님이 댓글을 남겼습니다.",
+                "원송희 님이 댓글을 남겼습니다",
                 style: TextStyle(
                   color: Theme.of(context).secondaryHeaderColor,
                   fontSize: 12,
@@ -62,11 +64,14 @@ class _NoticeContainerState extends State<NoticeContainer> {
                   decoration: TextDecoration.none,
                 ),
               ),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               Text(
                 "2023-05-01 09:12",
                 style: TextStyle(
-                  color: Theme.of(context).secondaryHeaderColor.withOpacity(0.5),
+                  color:
+                      Theme.of(context).secondaryHeaderColor.withOpacity(0.5),
                   fontSize: 10,
                   fontWeight: FontWeight.normal,
                   decoration: TextDecoration.none,
