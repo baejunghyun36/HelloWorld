@@ -19,6 +19,7 @@ export default {
                 (response) => {
                     console.log(response);
                     window.localStorage.setItem("access-token", response.data.data.accessToken);
+                    window.localStorage.setItem("refresh-token", response.data.data.refreshToken);
                     window.localStorage.setItem("user-seq", response.data.data.userSeq);
                     this.$router.push({ name: 'mainpage' });
                 },

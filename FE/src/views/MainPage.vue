@@ -38,10 +38,21 @@ export default {
                     console.log(error);
                 }
             )
-        }
+        },
+        // getGrass: async function () {
+        //     http.get(`/grass?startDate=2022-01-01&endDate=2023-05-01`).then(
+        //         (response)=> {
+        //             console.log(response);
+        //         },
+        //         (error)=> {
+        //             console.log(window.localStorage.getItem('access-token'))
+        //             console.log(error);
+        //         }
+        //     )
+        // }
     },
     mounted() {
-        this.getUser();
+        // this.getGrass();
     }
 };
 </script>
