@@ -22,9 +22,9 @@ public class BoardController {
     }
 
     @GetMapping("")
-    ResponseEntity<?> getBoard(){
+    ResponseEntity<?> getBoard(@RequestParam Long userSeq, @RequestParam Long boardSeq) throws Exception {
 
-        return ResponseEntity.ok().body(boardService.getBoard());
+        return ResponseEntity.ok().body(boardService.getBoard(userSeq,boardSeq));
     }
 
     @PatchMapping("")

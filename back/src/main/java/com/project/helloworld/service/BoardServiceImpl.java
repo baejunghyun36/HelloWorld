@@ -6,6 +6,7 @@ import com.project.helloworld.domain.Sticker;
 import com.project.helloworld.domain.User;
 import com.project.helloworld.dto.MessageResponse;
 import com.project.helloworld.dto.request.*;
+import com.project.helloworld.dto.response.BoardDetailResponse;
 import com.project.helloworld.repository.BoardRepository;
 import com.project.helloworld.repository.CommentRepository;
 import com.project.helloworld.repository.StickerRepository;
@@ -14,6 +15,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -32,16 +36,37 @@ public class BoardServiceImpl implements BoardService{
         Board board = Board.builder().title(boardCreateBody.getTitle()).content(boardCreateBody.getContent()).
                 imgUrl("").likeCnt(0).helpfulCnt(0).understandCnt(0)
                 .user(user).build();
-        boardRepository.save(board);
-        MessageResponse messageResponse = MessageResponse.builder().message("게시글 작성 성공하였습니다.").build();
+        Board newBoardSaved = boardRepository.save(board);
+        MessageResponse messageResponse = MessageResponse.builder().type(-1).typeSeq(newBoardSaved.getBoardSeq())
+                .title(newBoardSaved.getUser().getName()+"님이 게시글을 작성하였습니다.")
+                .content("게시글게시글").receiveUserSeq(newBoardSaved.getUser().getUserSeq()).build();
         return ResponseEntity.ok().body(messageResponse);
     }
 
     @Override
-    public ResponseEntity<?> getBoard() {
-        // 검색 조건에 따라 보내야 할 것 같은데....
+    public ResponseEntity<?> getBoard(Long userSeq,Long boardSeq) throws Exception {
+        Board board = boardRepository.findById(boardSeq).orElseThrow(() -> new Exception("not exist board : "+boardSeq));
+        Boolean[] sticker = {false,false,false};
+        for(int i=0; i<board.getStickers().size(); i++){
+            if(board.getStickers().get(i).getUser().getUserSeq() == userSeq){
+                sticker[board.getStickers().get(i).getType()-1] = true;
 
-        return ResponseEntity.ok().body(null);
+            }
+
+        }
+        List<BoardDetailResponse.Comment> comments = board.getComments().stream().map(x -> new BoardDetailResponse.Comment(x.getUser().getName(),x.getContent(),x.getCreateTime()) ).collect(Collectors.toList());
+        BoardDetailResponse boardDetailResponse = BoardDetailResponse.builder()
+        .title(board.getTitle()).content(board.getContent()).writer(board.getUser().getName())
+                .sticker(sticker).imgUrl(board.getImgUrl())
+                .createTime(board.getCreateTime()).comments(comments)
+                .build();
+        return ResponseEntity.ok().body(boardDetailResponse);
+    }
+
+    @Override
+    public ResponseEntity<?> getBoards() throws Exception {
+        // Page 객체로    https://wonit.tistory.com/483 참고
+        return null;
     }
 
     @Override
@@ -50,42 +75,50 @@ public class BoardServiceImpl implements BoardService{
         Board newBoard = Board.builder().boardSeq(board.getBoardSeq()).title(boardModifyBody.getTitle()).content(boardModifyBody.getContent())
                 .imgUrl(board.getImgUrl()).likeCnt(board.getLikeCnt()).helpfulCnt(board.getHelpfulCnt())
                 .understandCnt(board.getUnderstandCnt()).user(board.getUser()).build();
-        boardRepository.save(newBoard);
-        MessageResponse messageResponse = MessageResponse.builder().message("게시글 수정 성공하였습니다.").build();
+        Board newBoardSaved = boardRepository.save(newBoard);
+        MessageResponse messageResponse = MessageResponse.builder().type(-1).typeSeq(newBoardSaved.getBoardSeq())
+                .title(newBoardSaved.getUser().getName()+"님이 게시글을 수정했습니다.")
+                .content("게시글 수정").build();
         return ResponseEntity.ok().body(messageResponse);
     }
 
     @Override
     public ResponseEntity<?> removeBoard(Long boardSeq) throws Exception {
         boardRepository.deleteById(boardSeq);
-        MessageResponse messageResponse = MessageResponse.builder().message("게시글 삭제 되었습니다.").build();
+        MessageResponse messageResponse = MessageResponse.builder().type(-1).title("게시글이 삭제되었습니다.").build();
         return ResponseEntity.ok().body(messageResponse);
     }
 
     @Override
     public ResponseEntity<?> createComment(CommentCreateBody commentCreateBody) throws Exception {
         Board board = boardRepository.findById(commentCreateBody.getBoardSeq()).orElseThrow(()-> new Exception("not exist board : "+commentCreateBody.getBoardSeq()));
-        Comment comment = Comment.builder().userSeq(commentCreateBody.getUserSeq()).content(commentCreateBody.getContent()).board(board).build();
-        commentRepository.save(comment);
+        User user = userRepository.findById(commentCreateBody.getUserSeq()).orElseThrow(() -> new Exception("not exist user : "+commentCreateBody.getUserSeq()));
+        Comment comment = Comment.builder().user(user).content(commentCreateBody.getContent()).board(board).build();
+        Comment newCommentSaved = commentRepository.save(comment);
 
-        MessageResponse messageResponse = MessageResponse.builder().message("댓글 등록 되었습니다.").build();
+        MessageResponse messageResponse = MessageResponse.builder().type(2).typeSeq(newCommentSaved.getCommentSeq())
+                .title(newCommentSaved.getUser().getName()+"님이 댓글을 등록하였습니다.").content("댓글댓글댓글")
+                .receiveUserSeq(newCommentSaved.getUser().getUserSeq()).build();
         return ResponseEntity.ok().body(messageResponse);
     }
 
     @Override
     public ResponseEntity<?> modifyComment(CommentModifyBody commentModifyBody) throws Exception {
         Comment comment = commentRepository.findById(commentModifyBody.getCommentSeq()).orElseThrow(() -> new Exception("not exist comment : "+commentModifyBody.getCommentSeq()));
-        Comment newComment = Comment.builder().commentSeq(comment.getCommentSeq()).userSeq(comment.getUserSeq())
+
+        Comment newComment = Comment.builder().commentSeq(comment.getCommentSeq()).user(comment.getUser())
                 .content(commentModifyBody.getContent()).date(comment.getDate()).board(comment.getBoard()).build();
-        commentRepository.save(newComment);
-        MessageResponse messageResponse = MessageResponse.builder().message("댓글 수정 되었습니다.").build();
+        Comment newCommentSaved = commentRepository.save(newComment);
+        MessageResponse messageResponse = MessageResponse.builder().type(-1).typeSeq(newCommentSaved.getCommentSeq())
+                .title(newCommentSaved.getUser().getName()+"님이 댓글을 수정하셨습니다.").content("댓글댓글댓글수정")
+                .build();
         return ResponseEntity.ok().body(messageResponse);
     }
 
     @Override
     public ResponseEntity<?> removeComment(Long commentSeq) throws Exception {
         commentRepository.deleteById(commentSeq);
-        MessageResponse messageResponse = MessageResponse.builder().message("댓글 삭제 되었습니다.").build();
+        MessageResponse messageResponse = MessageResponse.builder().type(-1).title("댓글 삭제 되었습니다.").build();
         return ResponseEntity.ok().body(messageResponse);
     }
 
@@ -94,8 +127,11 @@ public class BoardServiceImpl implements BoardService{
         User user = userRepository.findById(stickerCreateBody.getUserSeq()).orElseThrow(()-> new Exception("not exist user : "+stickerCreateBody.getUserSeq()));
         Board board = boardRepository.findById(stickerCreateBody.getBoardSeq()).orElseThrow(()-> new Exception("not exist board : "+stickerCreateBody.getBoardSeq()));
         Sticker sticker = Sticker.builder().user(user).board(board).type(stickerCreateBody.getType()).build();
-        stickerRepository.save(sticker);
-        MessageResponse messageResponse = MessageResponse.builder().message("반응이 추가되었습니다.").build();
+        Sticker newStickerSaved = stickerRepository.save(sticker);
+        MessageResponse messageResponse = MessageResponse.builder().type(5).typeSeq(newStickerSaved.getStickerSeq())
+                .title(newStickerSaved.getUser().getName()+"님이 반응을 했습니다.").content("좋아요")
+                .receiveUserSeq(newStickerSaved.getUser().getUserSeq())
+                .build();
         return ResponseEntity.ok().body(messageResponse);
     }
 
@@ -103,7 +139,7 @@ public class BoardServiceImpl implements BoardService{
     public ResponseEntity<?> removeSticker(Long stickerSeq) throws Exception {
 
         stickerRepository.deleteById(stickerSeq);
-        MessageResponse messageResponse = MessageResponse.builder().message("반응이 삭제되었습니다.").build();
+        MessageResponse messageResponse = MessageResponse.builder().type(-1).content("반응이 삭제되었습니다.").build();
         return ResponseEntity.ok().body(messageResponse);
     }
 
