@@ -43,6 +43,9 @@ public class User extends BaseTimeEntity implements UserDetails {
   @Column(name = "name")
   private String name;
 
+  @Column(name = "comment")
+  private String comment;
+
   @Column(name = "phone_number", unique = true)
   private String phoneNumber;
 
