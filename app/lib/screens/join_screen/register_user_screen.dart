@@ -9,6 +9,13 @@ class RegisterUser extends StatefulWidget {
 }
 
 class _RegisterUserState extends State<RegisterUser> {
+  var emailController = TextEditingController();
+  var pwController = TextEditingController();
+  var pw2Controller = TextEditingController();
+  var nameController = TextEditingController();
+  var nicknameController = TextEditingController();
+  var phoneNumController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +43,9 @@ class _RegisterUserState extends State<RegisterUser> {
                           textAlign: TextAlign.start,
                           style: TextStyle(
                             fontSize: 12,
-                            color: Theme.of(context).primaryColorLight,
+                            color: Theme
+                                .of(context)
+                                .primaryColorLight,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -46,11 +55,14 @@ class _RegisterUserState extends State<RegisterUser> {
                         Container(
                           height: 30,
                           child: TextField(
+                            controller: emailController,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
                                     color:
-                                        Theme.of(context).secondaryHeaderColor),
+                                    Theme
+                                        .of(context)
+                                        .secondaryHeaderColor),
                                 borderRadius: BorderRadius.circular(5),
                               ),
                               contentPadding: EdgeInsets.symmetric(
@@ -67,7 +79,9 @@ class _RegisterUserState extends State<RegisterUser> {
                           textAlign: TextAlign.start,
                           style: TextStyle(
                             fontSize: 12,
-                            color: Theme.of(context).primaryColorLight,
+                            color: Theme
+                                .of(context)
+                                .primaryColorLight,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -77,11 +91,14 @@ class _RegisterUserState extends State<RegisterUser> {
                         Container(
                           height: 30,
                           child: TextField(
+                            controller: pwController,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
                                     color:
-                                        Theme.of(context).secondaryHeaderColor),
+                                    Theme
+                                        .of(context)
+                                        .secondaryHeaderColor),
                                 borderRadius: BorderRadius.circular(5),
                               ),
                               contentPadding: EdgeInsets.symmetric(
@@ -98,7 +115,9 @@ class _RegisterUserState extends State<RegisterUser> {
                           textAlign: TextAlign.start,
                           style: TextStyle(
                             fontSize: 12,
-                            color: Theme.of(context).primaryColorLight,
+                            color: Theme
+                                .of(context)
+                                .primaryColorLight,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -108,11 +127,14 @@ class _RegisterUserState extends State<RegisterUser> {
                         Container(
                           height: 30,
                           child: TextField(
+                            controller: pw2Controller,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
                                     color:
-                                        Theme.of(context).secondaryHeaderColor),
+                                    Theme
+                                        .of(context)
+                                        .secondaryHeaderColor),
                                 borderRadius: BorderRadius.circular(5),
                               ),
                               contentPadding: EdgeInsets.symmetric(
@@ -129,7 +151,9 @@ class _RegisterUserState extends State<RegisterUser> {
                           textAlign: TextAlign.start,
                           style: TextStyle(
                             fontSize: 12,
-                            color: Theme.of(context).primaryColorLight,
+                            color: Theme
+                                .of(context)
+                                .primaryColorLight,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -139,11 +163,14 @@ class _RegisterUserState extends State<RegisterUser> {
                         Container(
                           height: 30,
                           child: TextField(
+                            controller: nameController,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
                                     color:
-                                        Theme.of(context).secondaryHeaderColor),
+                                    Theme
+                                        .of(context)
+                                        .secondaryHeaderColor),
                                 borderRadius: BorderRadius.circular(5),
                               ),
                               contentPadding: EdgeInsets.symmetric(
@@ -160,7 +187,9 @@ class _RegisterUserState extends State<RegisterUser> {
                           textAlign: TextAlign.start,
                           style: TextStyle(
                             fontSize: 12,
-                            color: Theme.of(context).primaryColorLight,
+                            color: Theme
+                                .of(context)
+                                .primaryColorLight,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -170,11 +199,50 @@ class _RegisterUserState extends State<RegisterUser> {
                         Container(
                           height: 30,
                           child: TextField(
+                            controller: nicknameController,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
                                     color:
-                                        Theme.of(context).secondaryHeaderColor),
+                                    Theme
+                                        .of(context)
+                                        .secondaryHeaderColor),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 8,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          "핸드폰 번호",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Theme
+                                .of(context)
+                                .primaryColorLight,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Container(
+                          height: 30,
+                          child: TextField(
+                            controller: phoneNumController,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color:
+                                    Theme
+                                        .of(context)
+                                        .secondaryHeaderColor),
                                 borderRadius: BorderRadius.circular(5),
                               ),
                               contentPadding: EdgeInsets.symmetric(
@@ -206,7 +274,9 @@ class _RegisterUserState extends State<RegisterUser> {
                           ),
                         ),
                         decoration: BoxDecoration(
-                          color: Theme.of(context).disabledColor,
+                          color: Theme
+                              .of(context)
+                              .disabledColor,
                           borderRadius: BorderRadius.circular(7),
                         ),
                       ),
@@ -224,7 +294,9 @@ class _RegisterUserState extends State<RegisterUser> {
                           ),
                         ),
                         decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColorLight,
+                          color: Theme
+                              .of(context)
+                              .primaryColorLight,
                           borderRadius: BorderRadius.circular(7),
                         ),
                       ),
@@ -244,6 +316,19 @@ class _RegisterUserState extends State<RegisterUser> {
   }
 
   next() {
-    Navigator.pushNamed(context, '/register-character');
+    print(emailController.text);
+    print(pwController.text);
+    print(pw2Controller.text);
+    print(nameController.text);
+    print(nicknameController.text);
+    print(phoneNumController.text);
+    Navigator.pushNamed(context, '/register-character', arguments: {
+    'email': emailController.text,
+      'pw': pwController.text,
+      'name': nameController.text,
+      'nickname': nicknameController.text,
+      'phoneNum': phoneNumController.text,
+
+    },);
   }
 }

@@ -16,11 +16,11 @@ Future<dynamic> apiInstance({
   List<Map<String, dynamic>>? bodyList,
 }) async {
   // api URL 주소 작성
-  String URL = 'http://k8a508.p.ssafy.io:8080/api/v1$path';
+  String URL = 'http://k8a508.p.ssafy.io:8080/api$path';
   // uri 형식으로 변경
   final url = Uri.parse(URL);
-  Future<String?> futureString = storage.read(key: "accessToken");
-  String? accessToken = await futureString;
+  // Future<String?> futureString = storage.read(key: "accessToken");
+  // String? accessToken = await futureString;
 
   // bodyList가 null이 아니라면 body 대신 사용
   final requestBody = bodyList != null ? json.encode(bodyList) : json.encode(body);
@@ -28,7 +28,7 @@ Future<dynamic> apiInstance({
   // 기본 headers
   Map<String, String> headers = {
     "Content-Type": "application/json;charset=utf-8",
-    'Authorization': 'Bearer $accessToken',
+    // 'Authorization': 'Bearer $accessToken',
   };
 
   // response 값

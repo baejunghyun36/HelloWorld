@@ -7,6 +7,7 @@ import 'dart:typed_data';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:app/services/sign_up_api.dart';
 
 class RegisterCharacter extends StatefulWidget {
   const RegisterCharacter({Key? key}) : super(key: key);
@@ -29,8 +30,25 @@ class _RegisterCharacterState extends State<RegisterCharacter> {
   late String shirtNum = '';
   late String pantsNum = '';
 
+
   @override
   Widget build(BuildContext context) {
+    Map<String, String> _buildUserInfoBody() {
+      final args =
+      ModalRoute.of(context)?.settings.arguments as Map<String, String?>?;
+      return {
+        "email": args!['email'].toString(),
+        "name": args!['name'].toString(),
+        "nickname": args!['nickname'].toString(),
+        "password": args!['pw'].toString(),
+        "phoneNumber": args!['phoneNum'].toString(),
+      };
+    }
+    void join() {
+
+      Navigator.pushNamed(context, '/login');
+    }
+
     return Scaffold(
       backgroundColor: Color(0xFFFFFFFF),
       body: Center(
@@ -3433,7 +3451,17 @@ class _RegisterCharacterState extends State<RegisterCharacter> {
                   ),
                 ),
                 TextButton(
-                  onPressed: join,
+                  onPressed: () {
+                    signUp(
+                        success: (dynamic response) async {
+                          print("SUCCESS");
+                        },
+                        fail: (error) {
+                          print('회원가입: $error');
+                        },
+                        body: _buildUserInfoBody(),
+                    );
+                  },
                   child: Container(
                     width: 140,
                     height: 40,
@@ -3458,12 +3486,10 @@ class _RegisterCharacterState extends State<RegisterCharacter> {
     );
   }
 
+
+
   mvPrev() {
     Navigator.pop(context);
-  }
-
-  join() {
-    Navigator.pushNamed(context, '/login');
   }
 
   void _capture() async {
@@ -3474,7 +3500,7 @@ class _RegisterCharacterState extends State<RegisterCharacter> {
       ui.Image image = await boundary.toImage();
       final directory = (await getApplicationDocumentsDirectory()).path;
       ByteData? byteData =
-      await image.toByteData(format: ui.ImageByteFormat.png);
+          await image.toByteData(format: ui.ImageByteFormat.png);
       Uint8List pngBytes = byteData!.buffer.asUint8List();
       // print(pngBytes);
       File imgFile = new File('$directory/screenshot.png');
