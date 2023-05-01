@@ -14,3 +14,18 @@ void signUp({
     fail: fail,
   );
 }
+
+// 로그인
+void login({
+  required dynamic Function(dynamic) success,
+  required Function(String error) fail,
+  Map<String, String>? body,
+}) {
+  apiInstance(
+    path: '/user/signIn',
+    method: Method.post,
+    body: body,
+    success: success,
+    fail: fail,
+  );
+}

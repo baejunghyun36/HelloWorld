@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:app/widgets/logo_widget/logo_widget.dart';
+import 'package:app/services/user_api.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -9,6 +11,18 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  static const storage =
+      FlutterSecureStorage(); // FlutterSecureStorage를 storage로 저장
+
+  Map<String, String> _buildLoginInfoBody() {
+    final args =
+    ModalRoute.of(context)?.settings.arguments as Map<String, String?>?;
+    return {
+      "email": args!['email'].toString(),
+      "password": args!['pw'].toString(),
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,7 +110,17 @@ class _LoginState extends State<Login> {
                   height: 20,
                 ),
                 TextButton(
-                  onPressed: login,
+                  onPressed: () {
+                    login(
+                      success: (dynamic response) async {
+                        print("SUCCESS");
+                      },
+                      fail: (error) {
+                        print('로그인: $error');
+                      },
+                      body: _buildLoginInfoBody(),
+                    );
+                  },
                   child: Container(
                     width: 300,
                     height: 40,
@@ -168,10 +192,6 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
-  }
-
-  login() {
-    Navigator.pushNamed(context, '/home');
   }
 
   loginWithGithub() {}

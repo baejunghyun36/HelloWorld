@@ -7,7 +7,7 @@ import 'dart:typed_data';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:app/services/sign_up_api.dart';
+import 'package:app/services/user_api.dart';
 
 class RegisterCharacter extends StatefulWidget {
   const RegisterCharacter({Key? key}) : super(key: key);
@@ -44,10 +44,10 @@ class _RegisterCharacterState extends State<RegisterCharacter> {
         "phoneNumber": args!['phoneNum'].toString(),
       };
     }
-    void join() {
-
-      Navigator.pushNamed(context, '/login');
-    }
+    // void join() {
+    //
+    //   Navigator.pushNamed(context, '/login');
+    // }
 
     return Scaffold(
       backgroundColor: Color(0xFFFFFFFF),
