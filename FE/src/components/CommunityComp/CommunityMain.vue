@@ -4,37 +4,18 @@
         <UserTitleComp />
         <div class="right-body">
             <div class="community-notice"># 다양한 게시글들을 만나보세요</div>
-            <tabs v-model="selectedTab">
-                <tab class="tab" v-for="(tab, i) in tabs" :key="`t${i}`" :val="tab" :label="tab" :indicator="true" />
-            </tabs>
-            <tab-panels v-model="selectedTab" :animate="true">
-                <tab-panel v-for="(tab, i) in tabs" :key="`tp${i}`" :val="tab">
-                    {{ tab }}
-                </tab-panel>
-            </tab-panels>
+            
         </div>
     </div>
 </template>
 
 <script>
 import UserTitleComp from "@/components/BasicComp/UserTitleComp.vue"
-import { Tabs, Tab, TabPanels, TabPanel } from 'vue3-tabs';
-import {reactive, toRefs } from 'vue';
-
-const tabs = ['A', 'B', 'C'];
 
 
 export default {
-    components: { UserTitleComp, Tabs, Tab, TabPanels, TabPanel },
-    setup() {
-    const state = reactive({
-      selectedTab: tabs[1]
-    });
-    return {
-      tabs,
-      ...toRefs(state)
-    };
-  }
+    components: { UserTitleComp, },
+   
 }
 
 </script>
