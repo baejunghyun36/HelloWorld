@@ -11,6 +11,8 @@ import MainPage from '@/views/MainPage.vue'
 import RegisterCharacter from '@/views/UserView/register/RegisterCharacter.vue'
 import ModifyUser from '@/views/UserView/modify/ModifyUser.vue'
 import Statistic from '@/views/StatisticView.vue'
+import RedirectHandler from '@/views/UserView/login/RedirectHandle.vue'
+import Community from '@/views/CommunityView.vue';
 
 const routes = [
   {
@@ -70,6 +72,16 @@ const routes = [
     path: "/statistic",
     name: "statistic",
     component: Statistic,
+  },
+  {
+    path: "/redirect-handler",
+    name: "redirect-handler",
+    component: RedirectHandler,
+  },
+  {
+    path: "/community",
+    name: "community",
+    component: Community,
   }
 ];
 

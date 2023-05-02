@@ -11,7 +11,8 @@ export default {
             //   console.error(error);
 
             // }
-            window.location.assign("http://k8a308.p.ssafy.io/oauth2/authorize/github");
+            
+            window.location.assign("https://k8a308.p.ssafy.io/api/oauth2/authorize/github?redirect_uri=https://k8a308.p.ssafy.io/redirect-handler");
         }
     }
 }
