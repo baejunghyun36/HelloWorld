@@ -13,13 +13,13 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   static const storage =
       FlutterSecureStorage(); // FlutterSecureStorage를 storage로 저장
+  var emailController = TextEditingController();
+  var pwController = TextEditingController();
 
   Map<String, String> _buildLoginInfoBody() {
-    final args =
-    ModalRoute.of(context)?.settings.arguments as Map<String, String?>?;
     return {
-      "email": args!['email'].toString(),
-      "password": args!['pw'].toString(),
+      "email": emailController.text,
+      "password": pwController.text,
     };
   }
 
@@ -59,6 +59,7 @@ class _LoginState extends State<Login> {
                       Container(
                         height: 30,
                         child: TextField(
+                          controller: emailController,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderSide: BorderSide(
@@ -90,6 +91,7 @@ class _LoginState extends State<Login> {
                       Container(
                         height: 30,
                         child: TextField(
+                          controller: pwController,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderSide: BorderSide(
@@ -113,7 +115,11 @@ class _LoginState extends State<Login> {
                   onPressed: () {
                     login(
                       success: (dynamic response) async {
-                        print("SUCCESS");
+                        await storage.write(
+                          key: "access-token",
+                          value: response['data']['accessToken']
+                        );
+                        Navigator.pushNamed(context, '/home');
                       },
                       fail: (error) {
                         print('로그인: $error');
