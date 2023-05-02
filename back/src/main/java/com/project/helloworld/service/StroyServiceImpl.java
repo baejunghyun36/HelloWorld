@@ -1,6 +1,7 @@
 package com.project.helloworld.service;
 
 import com.project.helloworld.domain.Board;
+import com.project.helloworld.domain.Family;
 import com.project.helloworld.domain.Guestbook;
 import com.project.helloworld.domain.User;
 import com.project.helloworld.dto.StoryDto;
@@ -22,9 +23,14 @@ public class StroyServiceImpl implements StoryService{
     private static final String TOPIC = "user-story";
     @Autowired
     private KafkaTemplate<String, StoryDto> kafkaTemplate;
-    @Async
-    public void sendStory(Board board) {
+    public void findFamilies(Board board){
         User writer = board.getUser();
-        writer.getFamilies().stream().forEach(x-> kafkaTemplate.send (TOPIC, new StoryDto(board,writer,x.getFamilyUserSeq())));
+        sendStory(board, writer.getFamilies());
+    }
+    @Async
+    public void sendStory(Board board, List<Family> families) {
+        User writer = board.getUser();
+        if(families.isEmpty()) kafkaTemplate.send(TOPIC, new StoryDto(board,writer,1L));
+        else families.stream().forEach(x-> kafkaTemplate.send (TOPIC, new StoryDto(board,writer, x.getFamilyUserSeq())));
     }
 }
