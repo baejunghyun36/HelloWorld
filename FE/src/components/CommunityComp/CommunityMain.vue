@@ -8,7 +8,6 @@
                     <input type="search" name="search" pattern=".*\S.*" required>
                     
                     <button class="search-btn" type="submit">
-                        
                     </button>
                 </form>
 
@@ -59,7 +58,7 @@ export default {
     display: flex;
     justify-content: start;
     height: 11%;
-    margin-left: 2.5%;
+    /* margin-left: 1%; */
 }
 .whole-alticles {
     width: 98%;
@@ -77,10 +76,10 @@ export default {
 .whole-alticles::-webkit-scrollbar-thumb {
     height: 20%;
     /* 스크롤바의 길이 */
-    background: #6A6A6A;
+    background: #8C8C8C;
     /* 스크롤바의 색상 */
 
-    border-radius: 10px;
+    border-radius: 20px;
 }
 
 .whole-alticles::-webkit-scrollbar-track {
@@ -137,7 +136,13 @@ input {
 .search-bar,
 .search-bar input:focus,
 .search-bar input:valid {
-    width: 100%;
+    width: 50%;
+}
+
+.search-bar input:focus,
+.search-bar input:valid {
+    width: 80%;
+    margin-left: 5%;
 }
 
 .search-bar input:focus,
