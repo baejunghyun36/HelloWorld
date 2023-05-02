@@ -6,6 +6,7 @@ import com.project.helloworld.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,7 +17,7 @@ public class BoardController {
 
     private final BoardService boardService;
     @PostMapping("")
-    ResponseEntity<?> createBoard(@RequestBody BoardCreateBody boardCreateBody) throws Exception {
+    ResponseEntity<?> createBoard(@Validated  @RequestBody BoardCreateBody boardCreateBody) throws Exception {
 
         return ResponseEntity.ok().body(boardService.createBoard(boardCreateBody));
     }
@@ -38,7 +39,7 @@ public class BoardController {
     }
 
     @DeleteMapping("")
-    ResponseEntity<?> removeBoard(Long boardSeq) throws Exception {
+    ResponseEntity<?> removeBoard(@RequestParam Long boardSeq) throws Exception {
 
         return ResponseEntity.ok().body(boardService.removeBoard(boardSeq));
     }

@@ -1,17 +1,11 @@
 package com.project.helloworld.service;
 
-import com.project.helloworld.domain.Board;
-import com.project.helloworld.domain.Comment;
-import com.project.helloworld.domain.Sticker;
-import com.project.helloworld.domain.User;
+import com.project.helloworld.domain.*;
 import com.project.helloworld.dto.MessageResponse;
 import com.project.helloworld.dto.request.*;
 import com.project.helloworld.dto.response.BoardDetailResponse;
 import com.project.helloworld.dto.response.BoardListResponse;
-import com.project.helloworld.repository.BoardRepository;
-import com.project.helloworld.repository.CommentRepository;
-import com.project.helloworld.repository.StickerRepository;
-import com.project.helloworld.repository.UserRepository;
+import com.project.helloworld.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -19,6 +13,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +29,8 @@ public class BoardServiceImpl implements BoardService{
     private final CommentRepository commentRepository;
 
     private final StickerRepository stickerRepository;
+
+    private final GrassRepository grassRepository;
     @Override
     public ResponseEntity<?> createBoard(BoardCreateBody boardCreateBody) throws Exception {
         User user = userRepository.findById(boardCreateBody.getUserSeq()).orElseThrow(()-> new Exception("not exist user : "+boardCreateBody.getUserSeq()));
@@ -40,6 +38,10 @@ public class BoardServiceImpl implements BoardService{
                 imgUrl("").likeCnt(0).helpfulCnt(0).understandCnt(0)
                 .user(user).build();
         Board newBoardSaved = boardRepository.save(board);
+        // 잔디도 심어주기
+        LocalDate grassDate = newBoardSaved.getCreateTime().toLocalDate();
+        Grass grass = Grass.builder().grassDate(grassDate).board(newBoardSaved).user(newBoardSaved.getUser()).build();
+        grassRepository.save(grass);
         MessageResponse messageResponse = MessageResponse.builder().type(-1).typeSeq(newBoardSaved.getBoardSeq())
                 .title(newBoardSaved.getUser().getName()+"님이 게시글을 작성하였습니다.")
                 .content("게시글게시글").receiveUserSeq(newBoardSaved.getUser().getUserSeq()).build();
@@ -91,7 +93,9 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public ResponseEntity<?> removeBoard(Long boardSeq) throws Exception {
-        boardRepository.deleteById(boardSeq);
+        Board board = boardRepository.findById(boardSeq).orElseThrow(() -> new Exception("not exist board : "+boardSeq));
+        log.info(board.toString());
+        boardRepository.delete(board);
         MessageResponse messageResponse = MessageResponse.builder().type(-1).title("게시글이 삭제되었습니다.").build();
         return ResponseEntity.ok().body(messageResponse);
     }
