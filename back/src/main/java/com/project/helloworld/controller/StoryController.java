@@ -23,7 +23,7 @@ public class StoryController {
 
     @GetMapping("/test-send-msg")
     public ResponseEntity<?> storyTest( ){
-        storyService.findFamilies(Board.builder()
+        storyService.sendToFamilies(Board.builder()
                 .boardSeq(null)
                 .content("test_content")
                 .title("test_title")
