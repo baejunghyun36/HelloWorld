@@ -79,6 +79,10 @@ public class JwtTokenProvider {
                 .build();
     }
 
+    public String getEmail(String token){
+        return parseClaims(token).getSubject();
+    }
+
     // Access Token을 복호화하여 토큰에 들어있는 정보 꺼내는 메소드
     public Authentication getAuthentication(String accessToken) {
         // Token 복호화
@@ -101,8 +105,10 @@ public class JwtTokenProvider {
 
     // 토큰 유효성, 만료시간 검사
     public Boolean validateToken(String token) {
+        log.info("============================================= Validate Token =============================================");
         try {
             Jwts.parserBuilder().setSigningKey(getSignKey(SECRET_KEY)).build().parseClaimsJws(token);
+            log.info("============================================= Success ==============================================");
             return true;
         }catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e){
             log.info("유효하지 않은 JWT Token", e);
@@ -113,6 +119,7 @@ public class JwtTokenProvider {
         } catch (IllegalStateException e) {
             log.info("JWT claims String is empty", e);
         }
+        log.info("============================================= FAIL =============================================");
         return false;
     }
 

@@ -6,7 +6,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -29,7 +28,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final RedisTemplate redisTemplate;
+//    private final RedisTemplate redisTemplate;
     private final String AUTHORIZATION_HEADER = "Authorization";
     private final String BEARER_TYPE = "Bearer ";
 
@@ -39,12 +38,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (token != null && jwtTokenProvider.validateToken(token)) {
             // Redis 에 해당 accessToken logout 여부 확인
-            String isLogout = (String)redisTemplate.opsForValue().get(token);
-            if (ObjectUtils.isEmpty(isLogout)) {
+//            String isLogout = (String)redisTemplate.opsForValue().get(token);
+//            if (ObjectUtils.isEmpty(isLogout)) {
                 // 토큰이 유효할 경우 토큰에서 Authentication 객체를 가지고 와서 SecurityContext 에 저장
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
+//            }
         }
 
         filterChain.doFilter(request, response);

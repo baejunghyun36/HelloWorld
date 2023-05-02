@@ -41,6 +41,8 @@ public class SecurityConfig {
                         , "/swagger-ui.html/**"
                         , "/swagger-resources/**"
                         , "/webjars/**"
+                        ,"/swagger-ui/**"
+                        ,"/v3/api-docs/**"
                 );
         };
     }
@@ -53,7 +55,8 @@ public class SecurityConfig {
                 .cors().and().cors().configurationSource(corsConfigurationSource()).and()
                 .csrf().disable() // csrf 보안 설정 비활성화
                 // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter보다 앞으로 설정
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, redisTemplate), UsernamePasswordAuthenticationFilter.class)
+//                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, redisTemplate), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
                 .authenticationEntryPoint(customAuthenticationEntryPoint) // 토큰없는 사용자 요청시 unathorized error
                 .accessDeniedHandler(jwtAccessDeniedHandler)
