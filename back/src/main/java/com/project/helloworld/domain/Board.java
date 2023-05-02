@@ -36,6 +36,9 @@ public class Board extends BaseTimeEntity{
   @Column(name = "img_url")
   private String imgUrl;
 
+  @Column(name="view_cnt")
+  private int viewCnt;
+
   @Column(name = "like_cnt")
   private int likeCnt;
 

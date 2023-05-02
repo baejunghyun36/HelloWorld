@@ -10,7 +10,7 @@ public interface BoardService {
 
     ResponseEntity<?> getBoard(Long userSeq,Long boardSeq) throws Exception;
 
-    ResponseEntity<?> getBoards() throws Exception;
+    ResponseEntity<?> getBoards(int start , int size) throws Exception;
 
     ResponseEntity<?> modifyBoard(BoardModifyBody boardModifyBody) throws Exception;
 

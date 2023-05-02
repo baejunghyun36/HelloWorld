@@ -7,12 +7,15 @@ import com.project.helloworld.domain.User;
 import com.project.helloworld.dto.MessageResponse;
 import com.project.helloworld.dto.request.*;
 import com.project.helloworld.dto.response.BoardDetailResponse;
+import com.project.helloworld.dto.response.BoardListResponse;
 import com.project.helloworld.repository.BoardRepository;
 import com.project.helloworld.repository.CommentRepository;
 import com.project.helloworld.repository.StickerRepository;
 import com.project.helloworld.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -64,9 +67,13 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public ResponseEntity<?> getBoards() throws Exception {
+    public ResponseEntity<?> getBoards(int start,int size) throws Exception {
         // Page 객체로    https://wonit.tistory.com/483 참고
-        return null;
+
+        PageRequest pageRequest = PageRequest.of(start,size);
+        List<BoardListResponse> boardList = boardRepository.findAll(pageRequest)
+                .stream().map(x -> new BoardListResponse(x.getBoardSeq(),x.getTitle(),x.getUser().getName(),x.getCreateTime(),x.getViewCnt())).collect(Collectors.toList());
+        return ResponseEntity.ok().body(boardList);
     }
 
     @Override
