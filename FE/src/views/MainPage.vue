@@ -3,18 +3,57 @@
         <div class="grey-bg">
             <UserProfile />
             <MiniHomepage />
-            <CategoryNav />
+                <CategoryNav />
         </div>
-
     </div>
+    <!-- <audio controls autoplay loop> -->
+    <!-- <source src="http://soundbible.com/mp3/Air Plane Ding-SoundBible.com-496729130.mp3" type="audio/mp3"> -->
+    
+    <!-- <source src="http://www.youtube.com/v/EkRuV-h6Bv0?" type="audio/mp3"> -->
+    <!-- 이 문장은 사용자의 웹 브라우저가 audio 요소를 지원하지 않을 때 나타납니다! -->
+    <!-- </audio> -->
 </template>
 
 <script>
 import UserProfile from "@/components/MainPageComp/UserProfile.vue"
 import MiniHomepage from "@/components/MainPageComp/MiniHompage.vue"
 import CategoryNav from "@/components/BasicComp/CategoryNav.vue"
+import http from "@/api/httpWithAccessToken";
+// import axios from "axios"
+import 'url-search-params-polyfill';
+
 export default {
-    components: { UserProfile, MiniHomepage, CategoryNav },
+    components: { UserProfile, MiniHomepage, CategoryNav, },
+    methods: {
+        getUser: async function () {
+            // var userAvatar;
+            // await html2canvas(document.querySelector("#my-character-container")).then(function (canvas) {
+            //     userAvatar = canvas.toDataURL();
+            // });ole.log(user);
+            http.get(`/user/userInfo/${window.localStorage.getItem("user-seq")}`).then(
+                (response)=> {
+                    console.log(response);
+                },
+                (error)=> {
+                    console.log(error);
+                }
+            )
+        },
+        // getGrass: async function () {
+        //     http.get(`/grass?startDate=2022-01-01&endDate=2023-05-01`).then(
+        //         (response)=> {
+        //             console.log(response);
+        //         },
+        //         (error)=> {
+        //             console.log(window.localStorage.getItem('access-token'))
+        //             console.log(error);
+        //         }
+        //     )
+        // }
+    },
+    mounted() {
+        // this.getGrass();
+    }
 };
 </script>
 
@@ -37,5 +76,7 @@ export default {
     background-color: #F0F0F0;
     border-radius: 10px;
     display: flex;
+    justify-content: center;
+    align-items: center;
 }
 </style>

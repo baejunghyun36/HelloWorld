@@ -1,6 +1,20 @@
 <script>
+// import axios from "axios";
 export default {
     name: 'LoginOption',
+    methods: {
+        loginWithGithub: function () {
+            //     try {
+            //     var response = await axios.get("/github.com/login/oauth/authorize?client_id=67e5f9075db550de602e");
+            //     console.log(response);
+            // } catch (error) {
+            //   console.error(error);
+
+            // }
+            
+            window.location.assign("https://k8a308.p.ssafy.io/api/oauth2/authorize/github?redirect_uri=https://k8a308.p.ssafy.io/redirect-handler");
+        }
+    }
 }
 </script>
 
@@ -20,14 +34,16 @@ export default {
             </router-link>
         </div>
         <div>
-            <button class="login-with-github-btn">
+            <button class="login-with-github-btn" @click="loginWithGithub">
                 <div class="github-icon-container"><img class="github-icon" src="../../../assets/image/GithubLogo.png" />
                 </div>
                 github으로 로그인
             </button>
         </div>
         <div class="other-option">
-            <router-link to="/find-pw"><div class="pw-search">비밀번호 찾기</div></router-link>
+            <router-link to="/find-pw">
+                <div class="pw-search">비밀번호 찾기</div>
+            </router-link>
             <div>&nbsp;&nbsp;|&nbsp;&nbsp;</div>
             <router-link to="/join">
                 <div class="join">회원가입</div>
@@ -37,6 +53,11 @@ export default {
 </template>
 
 <style scoped>
+.login-with-github-btn {
+    text-decoration: none;
+    color: white;
+}
+
 a {
     text-decoration: underline;
     color: #8C8C8C;
@@ -117,6 +138,7 @@ a {
     transform: scale(1.05);
     transition: 0.5s;
 }
+
 .github-icon-container {
     width: 30px;
     height: 20px;
@@ -149,6 +171,4 @@ a {
 .login-with-github {
     text-decoration: underline;
     cursor: pointer;
-}
-
-</style>
+}</style>

@@ -2,14 +2,23 @@
     <svg class="grass" style="direction: ltr; margin-top: 4px;">
         <rect width="12" height="12" v-for="(grass, i) in grassInfo" :key="i" :x=17*parseInt(i/7) :y=15*(i%7) rx="2.5"
             stroke-width="0.5" fill="#82ACC1" :fill-opacity=0.25*(grass.boardList.length) 
-            stroke="#D9D9D9" class="grass-element" :id=grass.createDate @mouseover="grassHovered">
-            <title>HI</title>
+            stroke="#D9D9D9" class="grass-element" :id=grass.createDate @click="dateDetail" :boardList=grass.boardList
+            v-tippy="{ content: `${grass.createDate} 게시글 ${grass.boardList.length}개 작성`, arrow: false, placement: 'right' }">
         </rect>
     </svg>
+    <Teleport to="body">
+        <modal :show="showModal" @close="showModal = false" :date="date" :boardList="detailBoardList">
+            <template #header>
+                <h3>custom header</h3>
+            </template>
+        </modal>
+    </Teleport>
 </template>
 
 <script>
+import Modal from '@/components/MainPageComp/GrassModal.vue'
 export default {
+    components: {Modal,},
     data() {
         return {
             grassInfo: [
@@ -23,15 +32,18 @@ export default {
                 {'createDate' : '2023-04-23', 'boardList':[444, 767, 235, 1522]},
                 {'createDate' : '2023-04-24', 'boardList':[2, 3]},
             ],
-            msg: "HI",
+            showModal: false,
+            date: null,
+            detailBoardList: null,
         }
     },
     methods: {
-        grassHovered: function(e) {
+        dateDetail: async function(e) {
             e.preventDefault();
-            
-            console.log(e.target.id);
-            document.getElementById(e.target.id)
+            this.date = e.target.id;
+            this.detailBoardList = await e.target.getAttribute("boardList").split(",");
+            console.log(this.detailBoardList);
+            this.showModal = true;
         }
     }
 }

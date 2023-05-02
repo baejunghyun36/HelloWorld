@@ -1,6 +1,5 @@
 <template>
     <div class="wrap">
-        <div class="blank"></div>
         <UserTitleComp />
         <div class="right-body">
             <div class="story">
@@ -96,9 +95,6 @@ export default {
 </script>
 
 <style scoped>
-.blank {
-    height: 40px;
-}
 
 .right-body {
     background-color: white;
@@ -126,6 +122,8 @@ export default {
     display: flex;
     justify-content: space-evenly;
     margin-top: 2.25vh;
+    width: 90%;
+    overflow: hidden;
 }
 
 .story-element-container {
