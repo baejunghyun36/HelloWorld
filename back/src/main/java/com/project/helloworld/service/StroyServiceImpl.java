@@ -23,7 +23,7 @@ public class StroyServiceImpl implements StoryService{
     private static final String TOPIC = "user-story";
     @Autowired
     private KafkaTemplate<String, StoryDto> kafkaTemplate;
-    public void findFamilies(Board board){
+    public void sendToFamilies(Board board){
         User writer = board.getUser();
         sendStory(board, writer.getFamilies());
     }
