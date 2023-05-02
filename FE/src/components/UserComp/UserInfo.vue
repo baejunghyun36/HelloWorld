@@ -80,10 +80,11 @@ export default {
                 refreshToken: window.localStorage.getItem('refresh-token'),
             }
             console.log(tokens);
-            http.post(`/user/logout`, tokens).then(
+            http.post(`/user/logout`, JSON.stringify(tokens)).then(
                 (response) => {
                     console.log(response);
                     window.localStorage.removeItem("access-token");
+                    window.localStorage.removeItem("refresh-token");
                     window.localStorage.removeItem("user-seq");
                     this.$router.push({ name: 'before-login' });
                 },

@@ -14,7 +14,6 @@ export default {
                 email: this.email,
                 password: this.password,
             }
-            console.log(user);
             http.post(`/user/signIn`, JSON.stringify(user)).then(
                 (response) => {
                     console.log(response);
