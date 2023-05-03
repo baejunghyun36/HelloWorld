@@ -1,6 +1,6 @@
 <template>
     <div class="wrap">
-        <div class="blank"></div>
+        <!-- <div class="blank"></div> -->
         <UserTitleComp />
         <div class="right-body">
             <div class="profile-img-container">
@@ -77,7 +77,6 @@ export default {
         logout: async function () {
             var tokens = {
                 accessToken: window.localStorage.getItem('access-token'),
-                refreshToken: window.localStorage.getItem('refresh-token'),
             }
             console.log(tokens);
             http.post(`/user/logout`, JSON.stringify(tokens)).then(
