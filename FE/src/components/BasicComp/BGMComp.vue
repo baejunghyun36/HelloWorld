@@ -32,7 +32,7 @@ export default {
                     localStorage.removeItem("user-seq");
                     localStorage.removeItem("refresh-token");
                     // localStorage.clear();
-                    window.location.replace('http://https://k8a308.p.ssafy.io/');
+                    window.location.replace('https://k8a308.p.ssafy.io/');
                     // this.$router.push({ name: 'before-login' });
                 },
                 (error) => {
