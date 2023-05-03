@@ -63,6 +63,8 @@ public class UserServiceImpl implements UserService{
     private final PasswordEncoder passwordEncoder;
     private final FamilyService familyService;
     private final GrassService grassService;
+    private final VisitorService visitorService;
+
 
     DefaultMessageService messageService;
 
