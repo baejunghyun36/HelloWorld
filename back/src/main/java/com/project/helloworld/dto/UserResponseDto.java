@@ -55,8 +55,8 @@ public class UserResponseDto {
         private String phoneNumber;
         private String providerId;
         private AuthProvider authProvider;
-        private int today;
-        private int total;
+        private Long today;
+        private Long total;
         private Avatar avatar;
         private String backgroundUrl;
         private String bgmUrl;
