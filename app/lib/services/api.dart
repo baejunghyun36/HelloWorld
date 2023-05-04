@@ -214,12 +214,12 @@ Future<dynamic> apiNoticeInstance({
 
   // response 값
   late http.Response response;
-  List<dynamic> notice = [];
+  dynamic notice;
+  final streamController = StreamController<dynamic>();
   // method에 따라 다르게 요청하고 response값을 수신
   switch (method) {
     case Method.get:
       try {
-        print(url);
         var a = SSEClient.subscribeToSSE(
             url: url.toString(),
             header: {
@@ -228,6 +228,8 @@ Future<dynamic> apiNoticeInstance({
               "Accept": "text/event-stream",
               "Cache-Control": "no-cache",
             });
+        // a.listen((event) { print(event.data); notice = event.data!; });
+        // print("notice !!! $notice");
         return success(a);
       }
       catch (error) {

@@ -124,6 +124,7 @@ class _LoginState extends State<Login> {
                             key: "userSeq",
                             value: response['data']['userSeq'].toString(),
                         );
+                        print("어세스!!!! $response['data']['accessToken']");
                         Navigator.pushNamed(context, '/home');
                       },
                       fail: (error) {
