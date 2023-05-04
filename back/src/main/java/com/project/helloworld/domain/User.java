@@ -58,9 +58,6 @@ public class User extends BaseTimeEntity implements UserDetails {
   @Column(name = "providerId")
   private String providerId;
 
-  @Column(name = "today")
-  private int today;
-
   @Column(name = "total")
   private int total;
 
@@ -98,6 +95,10 @@ public class User extends BaseTimeEntity implements UserDetails {
   @JsonIgnore
   @OneToMany(mappedBy = "user")
   List<Sticker> stickers = new ArrayList<>();
+
+  @JsonIgnore
+  @OneToMany(mappedBy = "user")
+  List<TodayVisit> todayVisits = new ArrayList<>();
 
   /**
    * Security 관련 메소드

@@ -2,13 +2,11 @@ package com.project.helloworld.service;
 
 import com.project.helloworld.domain.User;
 import com.project.helloworld.dto.*;
-import com.project.helloworld.dto.response.GrassResponse;
 import com.project.helloworld.repository.UserRepository;
 import com.project.helloworld.security.jwt.JwtTokenProvider;
 import com.project.helloworld.security.oauth2.AuthProvider;
 import com.project.helloworld.util.Authority;
 import com.project.helloworld.security.SecurityUtil;
-import io.lettuce.core.ScriptOutputType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.nurigo.sdk.NurigoApp;
@@ -32,7 +30,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -64,8 +61,6 @@ public class UserServiceImpl implements UserService{
     private final FamilyService familyService;
     private final GrassService grassService;
     private final VisitorService visitorService;
-
-
     DefaultMessageService messageService;
 
     @Override
@@ -142,13 +137,15 @@ public class UserServiceImpl implements UserService{
     public ResponseEntity<?> getUserInfo(Long userSeq) throws Exception{
         User user = userRepository.findByUserSeq(userSeq).orElseThrow(()-> new Exception("해당하는 유저가 없습니다." + userSeq));
 
+        Long today = visitorService.getTodayVisitors(String.valueOf(userSeq));
+        Long total = visitorService.getTotalVisitors(String.valueOf(userSeq));
         UserResponseDto.UserInfo userInfo = UserResponseDto.UserInfo.builder()
                 .userSeq(userSeq)
                 .nickname(user.getNickname())
                 .name(user.getName())
                 .phoneNumber(user.getPhoneNumber())
-                .today(user.getToday())
-                .total(user.getTotal())
+                .today(today)
+                .total(total)
                 .bgmUrl(user.getBgmUrl())
                 .backgroundUrl(user.getBackgroundUrl())
                 .avatar(user.getAvatar())
@@ -169,7 +166,7 @@ public class UserServiceImpl implements UserService{
                 .name(user.getName())
                 .comment(user.getComment())
                 .phoneNumber(user.getPhoneNumber())
-                .today(user.getToday())
+//                .today(user.getToday())
                 .total(user.getTotal())
                 .bgmUrl(user.getBgmUrl())
                 .backgroundUrl(user.getBackgroundUrl())
