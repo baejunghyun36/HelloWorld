@@ -59,7 +59,7 @@ public class User extends BaseTimeEntity implements UserDetails {
   private String providerId;
 
   @Column(name = "total")
-  private int total;
+  private Long total;
 
   @Column(name = "background_url")
   private String backgroundUrl;
