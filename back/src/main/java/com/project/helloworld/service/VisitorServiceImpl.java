@@ -13,11 +13,11 @@ import java.util.concurrent.TimeUnit;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class VisitorServiceImpl implements VisitorService{
+public class VisitorServiceImpl implements VisitorService {
 
     private String ownerPrefix = "owner:";
-    private String  todayVisitor = " todayVisitor";
-    private String  totalVisitor = " totalVisitor";
+    private String todayVisitor = " todayVisitor";
+    private String totalVisitor = " totalVisitor";
     private final RedisTemplate<String, Object> redisTemplate;
 
     public void addVisitor(String ownerSeq, String visitorId) {
@@ -52,14 +52,8 @@ public class VisitorServiceImpl implements VisitorService{
     }
 
     // today key 만료시키기
-    public void expireTodayVisitors(String ownerSeq){
+    public void expireTodayVisitors(String ownerSeq) {
         String todayVisitorKey = ownerPrefix + ownerSeq + todayVisitor;
         redisTemplate.expire(todayVisitorKey, 0, TimeUnit.SECONDS);
-    }
-
-    public void refreshTotalVisitors(String ownerSeq){
-        String totalVisitorKey = ownerPrefix + ownerSeq + totalVisitor;
-        redisTemplate.expire(totalVisitorKey, 0, TimeUnit.MILLISECONDS);
-        HyperLogLogOperations<String, Object> ops = redisTemplate.opsForHyperLogLog();
     }
 }

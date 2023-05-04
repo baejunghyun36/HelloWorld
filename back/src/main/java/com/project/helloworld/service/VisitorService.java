@@ -5,5 +5,4 @@ public interface VisitorService {
     Long getTotalVisitors(String ownerSeq);
     Long getTodayVisitors(String ownerSeq);
     void expireTodayVisitors(String ownerSeq);
-    void refreshTotalVisitors(String ownerSeq);
 }
