@@ -6,6 +6,7 @@ import com.project.helloworld.dto.request.*;
 import com.project.helloworld.dto.response.BoardDetailResponse;
 import com.project.helloworld.dto.response.BoardListResponse;
 import com.project.helloworld.elkStack.domain.BoardDocument;
+
 import com.project.helloworld.repository.*;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -63,9 +64,10 @@ public class BoardServiceImpl implements BoardService{
         BoardDocument boardDocument = BoardDocument.builder()
             .id(newBoardSaved.getBoardSeq().toString())
             .title(newBoardSaved.getTitle())
-            .content(newBoardSaved.getContent())
+            .content(newBoardSaved.getContent().substring(0, 30))
             .imageUrl(newBoardSaved.getImgUrl())
             .likeCnt(newBoardSaved.getLikeCnt())
+            .boardSeq(newBoardSaved.getBoardSeq())
             .build();
 
         boardDocumentRepository.save(boardDocument);
@@ -189,11 +191,9 @@ public class BoardServiceImpl implements BoardService{
 
 
     @Cacheable(value = "searchResults", key = "#searchTerm")
-    public List<BoardDocument> searchByKeyword(String searchTerm) {
-
+    public ResponseEntity<?> searchByKeyword(String searchTerm, int page) {
         // 로그 메시지 추가
         log.info("Searching by searchTerm: {}", searchTerm);
-
 
         // 레디스에 검색어 빈도를 저장
         keywordCount.incrementSearchTermCount(searchTerm);
@@ -204,22 +204,23 @@ public class BoardServiceImpl implements BoardService{
 
         Query searchQuery = new NativeSearchQueryBuilder()
             .withQuery(boolQuery)
-            //.withSort(SortBuilders.fieldSort("createTime").order(SortOrder.DESC))
-            .withSort(SortBuilders.fieldSort("likes").order(SortOrder.DESC)) // likes 필드를 기준으로 내림차순 정렬
-            .withPageable(PageRequest.of(0, 18)) // Top 10 results
+            .withSort(SortBuilders.fieldSort("likeCnt").order(SortOrder.DESC)) // likes 필드를 기준으로 내림차순 정렬
+            .withPageable(PageRequest.of(page, 3)) // 요청한 페이지의 결과 반환
             .build();
 
         SearchHits<BoardDocument> searchHits = elasticsearchOperations.search(
             searchQuery, BoardDocument.class);
 
-        return searchHits.getSearchHits().stream()
+        List<BoardDocument> results = searchHits.getSearchHits().stream()
             .map(hit -> hit.getContent())
             .collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(results);
     }
 
-    public Set<Object> getTop10KeywordsByRedis() {
+    public ResponseEntity<Set<Object>> getTop10KeywordsByRedis() {
 
-        return redisTemplate.opsForZSet().reverseRange("search_ranking", 0, 9);
-
+        Set<Object> topKeywords = redisTemplate.opsForZSet().reverseRange("search_ranking", 0, 9);
+        return ResponseEntity.ok(topKeywords);
     }
 }

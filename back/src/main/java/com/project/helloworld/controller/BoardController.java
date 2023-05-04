@@ -1,14 +1,15 @@
 package com.project.helloworld.controller;
 
 
+import com.project.helloworld.dto.Response;
 import com.project.helloworld.dto.request.*;
-import com.project.helloworld.elkStack.domain.BoardDocument;
 import com.project.helloworld.service.BoardService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -75,16 +76,14 @@ public class BoardController {
     }
 
     @GetMapping("/getTopTen")
-    public List<Object> getTopSearchTerms(){
-        // 시간 측정 시작
-        Set<Object> topSearchTerms = boardService.getTop10KeywordsByRedis();
-        return new ArrayList<>(topSearchTerms);
+    ResponseEntity<?> getTopSearchTerms() throws Exception {
+        return ResponseEntity.ok().body(boardService.getTop10KeywordsByRedis());
     }
 
     // 키워드 검색
     @GetMapping("/searchByKeyword")
-    public List<BoardDocument> searchBoards(@RequestParam String keyword) {
-        System.out.println(keyword);
-        return boardService.searchByKeyword(keyword);
+    ResponseEntity<?> searchBoards(@RequestParam String keyword, @RequestParam int page) throws Exception {
+        return ResponseEntity.ok().body(boardService.searchByKeyword(keyword, page));
     }
+
 }
