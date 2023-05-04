@@ -2,7 +2,11 @@ package com.project.helloworld.controller;
 
 
 import com.project.helloworld.dto.request.*;
+import com.project.helloworld.elkStack.domain.BoardDocument;
 import com.project.helloworld.service.BoardService;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -70,5 +74,17 @@ public class BoardController {
         return ResponseEntity.ok().body(boardService.removeSticker(stickerSeq));
     }
 
+    @GetMapping("/getTopTen")
+    public List<Object> getTopSearchTerms(){
+        // 시간 측정 시작
+        Set<Object> topSearchTerms = boardService.getTop10KeywordsByRedis();
+        return new ArrayList<>(topSearchTerms);
+    }
 
+    // 키워드 검색
+    @GetMapping("/searchByKeyword")
+    public List<BoardDocument> searchBoards(@RequestParam String keyword) {
+        System.out.println(keyword);
+        return boardService.searchByKeyword(keyword);
+    }
 }

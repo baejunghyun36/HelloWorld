@@ -5,16 +5,26 @@ import com.project.helloworld.dto.MessageResponse;
 import com.project.helloworld.dto.request.*;
 import com.project.helloworld.dto.response.BoardDetailResponse;
 import com.project.helloworld.dto.response.BoardListResponse;
+import com.project.helloworld.elkStack.domain.BoardDocument;
 import com.project.helloworld.repository.*;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.Query;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +41,15 @@ public class BoardServiceImpl implements BoardService{
     private final StickerRepository stickerRepository;
 
     private final GrassRepository grassRepository;
+
+    private final BoardDocumentRepository boardDocumentRepository;
+
+    private final KeywordCount keywordCount;
+
+    private final ElasticsearchOperations elasticsearchOperations;
+
+    private final RedisTemplate<String, Object> redisTemplate;
+
     @Override
     public ResponseEntity<?> createBoard(BoardCreateBody boardCreateBody) throws Exception {
         User user = userRepository.findById(boardCreateBody.getUserSeq()).orElseThrow(()-> new Exception("not exist user : "+boardCreateBody.getUserSeq()));
@@ -38,6 +57,17 @@ public class BoardServiceImpl implements BoardService{
                 imgUrl("").likeCnt(0).helpfulCnt(0).understandCnt(0)
                 .user(user).build();
         Board newBoardSaved = boardRepository.save(board);
+
+        BoardDocument boardDocument = BoardDocument.builder()
+            .id(newBoardSaved.getBoardSeq().toString())
+            .title(newBoardSaved.getTitle())
+            .content(newBoardSaved.getContent())
+            .imageUrl(newBoardSaved.getImgUrl())
+            .likeCnt(newBoardSaved.getLikeCnt())
+            .build();
+
+        boardDocumentRepository.save(boardDocument);
+
         // 잔디도 심어주기
         LocalDate grassDate = newBoardSaved.getCreateTime().toLocalDate();
         Grass grass = Grass.builder().grassDate(grassDate).board(newBoardSaved).user(newBoardSaved.getUser()).build();
@@ -155,4 +185,38 @@ public class BoardServiceImpl implements BoardService{
     }
 
 
+    @Cacheable(value = "searchResults", key = "#searchTerm")
+    public List<BoardDocument> searchByKeyword(String searchTerm) {
+
+        // 로그 메시지 추가
+        log.info("Searching by searchTerm: {}", searchTerm);
+
+
+        // 레디스에 검색어 빈도를 저장
+        keywordCount.incrementSearchTermCount(searchTerm);
+
+        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery()
+            .should(QueryBuilders.matchQuery("title", searchTerm))
+            .should(QueryBuilders.matchQuery("content", searchTerm));
+
+        Query searchQuery = new NativeSearchQueryBuilder()
+            .withQuery(boolQuery)
+            //.withSort(SortBuilders.fieldSort("createTime").order(SortOrder.DESC))
+            .withSort(SortBuilders.fieldSort("likes").order(SortOrder.DESC)) // likes 필드를 기준으로 내림차순 정렬
+            .withPageable(PageRequest.of(0, 18)) // Top 10 results
+            .build();
+
+        SearchHits<BoardDocument> searchHits = elasticsearchOperations.search(
+            searchQuery, BoardDocument.class);
+
+        return searchHits.getSearchHits().stream()
+            .map(hit -> hit.getContent())
+            .collect(Collectors.toList());
+    }
+
+    public Set<Object> getTop10KeywordsByRedis() {
+
+        return redisTemplate.opsForZSet().reverseRange("search_ranking", 0, 9);
+
+    }
 }

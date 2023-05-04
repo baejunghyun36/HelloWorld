@@ -1,6 +1,9 @@
 package com.project.helloworld.service;
 
 import com.project.helloworld.dto.request.*;
+import com.project.helloworld.elkStack.domain.BoardDocument;
+import java.util.List;
+import java.util.Set;
 import org.springframework.http.ResponseEntity;
 
 public interface BoardService {
@@ -26,4 +29,7 @@ public interface BoardService {
 
     ResponseEntity<?> removeSticker(Long stickerSeq) throws Exception;
 
+    Set<Object> getTop10KeywordsByRedis();
+
+    List<BoardDocument> searchByKeyword(String searchTerm);
 }
