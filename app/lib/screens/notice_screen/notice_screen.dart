@@ -1,13 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:app/widgets/common/footer.dart';
-import 'package:app/widgets/notice_widget/notice_container.dart';
 import 'package:app/services/notice_api.dart';
-import 'package:flutter_client_sse/flutter_client_sse.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Notice extends StatefulWidget {
@@ -145,7 +141,9 @@ class _NoticeState extends State<Notice> {
                                 vertical: 8,
                               ),
                               decoration: BoxDecoration(
-                                color: jsonDecode(notice)['readState']?Color(0xFFF9F9F9).withOpacity(0.7):Colors.white,
+                                color: jsonDecode(notice)['readState']
+                                    ? Color(0xFFF9F9F9).withOpacity(0.7)
+                                    : Colors.white,
                                 borderRadius: BorderRadius.circular(10),
                                 boxShadow: [
                                   BoxShadow(
@@ -158,28 +156,38 @@ class _NoticeState extends State<Notice> {
                               ),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  // Container(
+                                  //   width: 50,
+                                  //   height: 50,
+                                  //   margin: EdgeInsets.symmetric(
+                                  //     horizontal: 10,
+                                  //   ),
+                                  //   decoration: BoxDecoration(
+                                  //       image: DecorationImage(
+                                  //         image: AssetImage(
+                                  //             'assets/images/no_image.jpg'),
+                                  //         fit: BoxFit.cover,
+                                  //       ),
+                                  //       borderRadius:
+                                  //           BorderRadius.circular(100),
+                                  //       border: Border.all(
+                                  //           color: Theme.of(context)
+                                  //               .secondaryHeaderColor
+                                  //               .withOpacity(0.3))),
+                                  // ),
                                   Container(
-                                    width: 50,
-                                    height: 50,
-                                    margin: EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                    ),
+                                    width: 7,
+                                    height: 7,
+                                    margin: EdgeInsets.only(top: 20, left: 10,),
                                     decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: AssetImage(
-                                              'assets/images/no_image.jpg'),
-                                          fit: BoxFit.cover,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                        border: Border.all(
-                                            color: Theme.of(context)
-                                                .secondaryHeaderColor
-                                                .withOpacity(0.3))),
+                                      borderRadius: BorderRadius.circular(100),
+                                      color: jsonDecode(notice)['readState']?Colors.transparent:Theme.of(context).disabledColor,
+                                    ),
                                   ),
                                   SizedBox(
-                                    width: 5,
+                                    width: 8,
                                   ),
                                   Column(
                                     crossAxisAlignment:
@@ -277,7 +285,6 @@ class _NoticeState extends State<Notice> {
                 ],
               ),
             ),
-            Footer(),
           ],
         )
         // child: Text("$notices", style: TextStyle(fontSize: 10,)),
