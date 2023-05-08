@@ -2,6 +2,7 @@ package com.project.helloworld.service;
 
 import com.project.helloworld.domain.User;
 import com.project.helloworld.dto.Response;
+import com.project.helloworld.dto.StatisticResponseDto;
 import com.project.helloworld.dto.VisitorResponseDto;
 import com.project.helloworld.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,10 +27,16 @@ public class StatisticServiceImpl implements StatisticService{
         User user = userRepository.findByUserSeq(userSeq).orElseThrow(()-> new Exception("해당하는 유저가 없습니다." + userSeq));
 
         List<VisitorResponseDto.WeeklyTodayInfo> weeklyTodayInfoList = visitorService.getWeeklyToday(userSeq);
-        for(int i=0; i< weeklyTodayInfoList.size(); i++){
-            System.out.println(weeklyTodayInfoList);
-        }
+        StatisticResponseDto.StatisticInfo statisticInfo = StatisticResponseDto.StatisticInfo.builder()
+                .likeCnt(user.getLikeCnt())
+                .helpfulCnt(user.getHelpfulCnt())
+                .understandCnt(user.getUnderstandCnt())
+                .build();
 
-        return response.success("", "통계 정보 조회를 성공했습니다.", HttpStatus.OK);
+        StatisticResponseDto statisticResponseDto = new StatisticResponseDto();
+        statisticResponseDto.setStatisticInfo(statisticInfo);
+        statisticResponseDto.setWeeklyTodayInfoList(weeklyTodayInfoList);
+
+        return response.success(statisticInfo, "통계 정보 조회를 성공했습니다.", HttpStatus.OK);
     }
 }
