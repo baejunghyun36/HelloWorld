@@ -86,6 +86,17 @@ public class familyController {
         return ResponseEntity.ok().body(familyService.randomWind(userSeq));
     }
 
+    // 일촌들 조회(그냥 친구목록 볼때, 순서 까지)
+    @GetMapping("/family-wind")
+    ResponseEntity<?> getFamiliesWind(@RequestParam Long userSeq) throws Exception{
+        return ResponseEntity.ok().body(familyService.getFamiliesWind(userSeq));
+    }
+
+    // 친구 추천 (친구의 친구?)
+    @GetMapping("/recommend")
+    ResponseEntity<?> recommendFriend(@RequestParam Long userSeq) throws Exception {
+        return ResponseEntity.ok().body(familyService.recommendFamily(userSeq));
+    }
 
 
 

@@ -48,6 +48,9 @@ public class Board extends BaseTimeEntity{
   @Column(name = "understand_cnt")
   private int understandCnt;
 
+  @Column(name="category_seq")
+  private int categorySeq;
+
   @JoinColumn(name = "user_seq", nullable = false)
   @ManyToOne(fetch = FetchType.LAZY)
   private User user;

@@ -28,9 +28,15 @@ public class BoardController {
         return ResponseEntity.ok().body(boardService.getBoard(userSeq,boardSeq));
     }
 
-    @GetMapping("/board-list")
-    ResponseEntity<?> getBoards(@RequestParam int start,@RequestParam int size) throws Exception {
-        return ResponseEntity.ok().body(boardService.getBoards(start,size));
+    @GetMapping("/board-list-all")
+    ResponseEntity<?> getBoardsAll(@RequestParam int start,@RequestParam int size) throws Exception {
+        return ResponseEntity.ok().body(boardService.getBoardsAll(start,size));
+    }
+
+    @GetMapping("/board-list-by-user")
+    ResponseEntity<?> getBoardsByUser(@RequestParam int start, @RequestParam int size, @RequestParam Long userSeq) throws Exception{
+
+        return ResponseEntity.ok().body(null);
     }
     @PatchMapping("")
     ResponseEntity<?> modifyBoard(@RequestBody BoardModifyBody boardModifyBody) throws Exception {

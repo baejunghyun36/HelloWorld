@@ -69,7 +69,7 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public ResponseEntity<?> getBoards(int start,int size) throws Exception {
+    public ResponseEntity<?> getBoardsAll(int start,int size) throws Exception {
         // Page 객체로    https://wonit.tistory.com/483 참고
 
         PageRequest pageRequest = PageRequest.of(start,size);

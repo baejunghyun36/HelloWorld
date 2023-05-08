@@ -31,6 +31,6 @@ public class StroyServiceImpl implements StoryService{
     public void sendStory(Board board, List<Family> families) {
         User writer = board.getUser();
         if(families.isEmpty()) kafkaTemplate.send(TOPIC, new StoryDto(board,writer,1L));
-        else families.stream().forEach(x-> kafkaTemplate.send (TOPIC, new StoryDto(board,writer, x.getFamilyUserSeq())));
+        else families.stream().forEach(x-> kafkaTemplate.send (TOPIC, new StoryDto(board,writer, x.getFamilyUser().getUserSeq())));
     }
 }
