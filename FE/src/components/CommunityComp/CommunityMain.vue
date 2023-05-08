@@ -15,7 +15,7 @@
             </div>
             <!-- <div>{{ topKeywords }}</div> -->
             <splide :options="options" class="keywords-container" id="slider">
-                <splide-slide v-for="(keyword, index) in topKeywords" :key="keyword.id">
+                <splide-slide v-for="(keyword, index) in topKeywords" :key="keyword">
                     <div class="keyword" :id="keyword" @click="search"> {{ index + 1 }}위&nbsp;&nbsp; {{ keyword }}
                     </div>
                 </splide-slide>
@@ -98,7 +98,7 @@ export default {
             );
         },
     },
-    mounted() {
+    created() {
         http.get(`/board/getTopTen`).then(
             (response) => {
                 this.topKeywords = response.data.body;
