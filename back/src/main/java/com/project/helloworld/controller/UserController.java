@@ -9,9 +9,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,11 +30,12 @@ public class UserController {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @ApiOperation(value = "회원가입", notes = "id, email, password, nickname, name")
-    @PostMapping("/signUp")
-    public ResponseEntity<?> signUp(@Validated @RequestBody UserRequestDto.SignUp signUp) throws Exception{
+    @PostMapping(value = "/signUp", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<?> signUp(@Validated @RequestPart(value = "key") UserRequestDto.SignUp signUp,
+                                    @RequestPart(value = "file", required = false) MultipartFile file) throws Exception{
         log.debug("singUp", signUp);
 
-        return userService.signUp(signUp);
+        return userService.signUp(signUp, file);
     }
 
     @ApiOperation(value = "일반 로그인", notes = "id, password")
