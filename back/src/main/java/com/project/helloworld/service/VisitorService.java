@@ -1,11 +1,13 @@
 package com.project.helloworld.service;
 
-import org.springframework.http.ResponseEntity;
+import com.project.helloworld.dto.VisitorResponseDto;
+
+import java.util.List;
 
 public interface VisitorService {
     void addVisitor(String email, String visitorId);
     Long getTotalVisitors(String ownerSeq);
     Long getTodayVisitors(String ownerSeq);
     void expireTodayVisitors(String ownerSeq);
-    ResponseEntity<?> getWeeklyToday(Long userSeq) throws Exception;
+    List<VisitorResponseDto.WeeklyTodayInfo> getWeeklyToday(Long userSeq) throws Exception;
 }
