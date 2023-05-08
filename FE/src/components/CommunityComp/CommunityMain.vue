@@ -5,13 +5,22 @@
         <div class="right-body">
             <div class="community-notice">
                 <form action="" class="search-bar">
-                    <input type="search" name="search" pattern=".*\S.*" required>
-                    
-                    <button class="search-btn" type="submit">
+                    <input type="search" name="search" pattern=".*\S.*" required v-model="searchKeyword">
+                    <button class="search-btn" @click="searchWithKeyword">
                     </button>
                 </form>
-
             </div>
+            <div class="keyword-notice">
+                # 실시간 인기 검색어
+            </div>
+            <!-- <div>{{ topKeywords }}</div> -->
+            <splide :options="options" class="keywords-container" id="slider">
+                <splide-slide v-for="(keyword, index) in topKeywords" :key="keyword.id">
+                    <div class="keyword" :id="keyword" @click="search"> {{ index + 1 }}위&nbsp;&nbsp; {{ keyword }}
+                    </div>
+                </splide-slide>
+            </splide>
+            <hr style="width: 96%; margin: 0 auto; margin-top: 5px;" />
             <div class="whole-alticles">
                 <div class="articles">
                     <ArticleComp />
@@ -34,27 +43,73 @@
 import UserTitleComp from "@/components/BasicComp/UserTitleComp.vue"
 import ArticleComp from "@/components/CommunityComp/ArticleComp.vue"
 import http from "@/api/httpWithAccessToken"
+// import { isProxy, toRaw } from 'vue';
 
 export default {
     components: { UserTitleComp, ArticleComp },
-    methods: {
-        getTopArticles: function () {
-            http.get(`/board/board-list?start=0&size=8`).then(
-                (response) => {
-                    console.log(response);
-                    return response;
-                },
-                (error) => {
-                    console.log(error);
-                    alert("인기 게시물 로드 실패!");
-                }
-            )
+    data() {
+        return {
+            topKeywords: [],
+            options: {
+                type: 'loop',
+                rewind: true,
+                perPage: 1,
+                pauseOnHover: false,
+                dots: false,
+                speed: 800,
+                pagination: false,
+                autoplay: true,
+                arrows: false,
+                interval: 2000,
+                direction: 'ttb',
+                perMove: 1,
+                height: 20,
+                width: 300,
+                start: 0,
+            },
+            searchKeyword: null,
         }
     },
+    methods: {
+        search: async function (e) {
+            e.preventDefault();
+            var keyword = e.target.id;
+            http.get(
+                `/board/searchByKeyword?keyword=${keyword}&page=0`
+            ).then((response) => {
+                console.log(response);
+            },
+                (error) => {
+                    console.log(error);
+                    alert("검색 실패!");
+                }
+            );
+        },
+        searchWithKeyword: async function () {
+            http.get(
+                `/board/searchByKeyword?keyword=${this.searchKeyword}&page=0`
+            ).then((response) => {
+                console.log(response);
+            },
+                (error) => {
+                    console.log(error);
+                    alert("검색 실패!");
+                }
+            );
+        },
+    },
     mounted() {
-        this.getTopArticles();
+        http.get(`/board/getTopTen`).then(
+            (response) => {
+                this.topKeywords = response.data.body;
+                console.log(this.topKeywords);
+            },
+            (error) => {
+                console.log(error);
+                alert("인기 검색어 로드 실패!");
+            }
+        );
     }
-
 }
 
 </script>
@@ -78,10 +133,38 @@ export default {
     height: 11%;
     /* margin-left: 1%; */
 }
+
+.keyword-notice {
+    text-align: start;
+    color: #6A6A6A;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    margin-left: 3%;
+}
+
+.keywords-container {
+    margin-left: 2.5%;
+    margin-top: 0.5%;
+}
+
+.keyword {
+    background-color: #82ACC1;
+    color: white;
+    padding: 3px 6px;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 10px;
+    margin-right: 5px;
+    justify-content: start;
+    cursor: pointer;
+}
+
+
 .whole-alticles {
     width: 98%;
     margin: 0 auto;
-    height: 84%;
+    height: 78%;
     /* overflow: hidden; */
     overflow-y: scroll;
 }
@@ -131,6 +214,7 @@ input {
 .search-bar {
     display: flex;
 }
+
 .search-bar input,
 .search-btn,
 .search-btn:before,
@@ -292,4 +376,5 @@ input {
     .search-btn {
         background: #f1f1f1;
     }
-}</style>
+}
+</style>
