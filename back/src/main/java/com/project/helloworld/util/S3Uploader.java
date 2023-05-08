@@ -26,6 +26,13 @@ public class S3Uploader {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+    /**
+     * 파일을 입력받고 확장자에 맞게 S3에 저장합니다.
+     * @param multipartFile: 저장될 이미지 파일
+     * @param dirName: 저장될 경로 // 지금은 avatar, article이 있고 나중에 필요한 경로가 다 정해지면 다른 경로는 안받도록 할게요
+     * @return 저장된 이미지 경로를 return 합니다.
+     * @throws IOException
+     */
     public String uploadFiles(MultipartFile multipartFile, String dirName) throws IOException {
         File uploadFile = convert(multipartFile).orElseThrow(()-> new IllegalArgumentException("MultipartFile -> File convert fail"));
         return upload(uploadFile,dirName);
