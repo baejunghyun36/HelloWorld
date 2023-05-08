@@ -1,6 +1,9 @@
 package com.project.helloworld.service;
 
 import com.project.helloworld.dto.request.*;
+
+import java.util.List;
+import java.util.Set;
 import org.springframework.http.ResponseEntity;
 
 public interface BoardService {
@@ -12,6 +15,7 @@ public interface BoardService {
 
     ResponseEntity<?> getBoardsAll(int start , int size) throws Exception;
 
+    ResponseEntity<?> getBoardsByUser(Long userSeq, int start, int size) throws Exception;
     ResponseEntity<?> modifyBoard(BoardModifyBody boardModifyBody) throws Exception;
 
     ResponseEntity<?> removeBoard(Long boardSeq) throws Exception;
@@ -26,4 +30,7 @@ public interface BoardService {
 
     ResponseEntity<?> removeSticker(Long stickerSeq) throws Exception;
 
+    ResponseEntity<?> getTop10KeywordsByRedis() throws Exception;
+
+    ResponseEntity<?> searchByKeyword(String searchTerm, int page)throws Exception;
 }

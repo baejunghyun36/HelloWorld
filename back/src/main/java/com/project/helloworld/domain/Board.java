@@ -48,6 +48,9 @@ public class Board extends BaseTimeEntity{
   @Column(name = "understand_cnt")
   private int understandCnt;
 
+  @Column(name="comment_cnt")
+  private int commentCnt;
+
   @Column(name="category_seq")
   private int categorySeq;
 
