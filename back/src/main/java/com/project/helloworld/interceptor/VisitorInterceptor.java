@@ -24,7 +24,6 @@ public class VisitorInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // 존재하지 않는 userSeq에 대해서도 redis에 저장됨;
         String path = request.getRequestURI();
         String[] pathSplit = path.split("/");
         String ownerSeq = pathSplit[3]; // 홈페이지 주인 seq
