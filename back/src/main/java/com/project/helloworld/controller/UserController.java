@@ -123,4 +123,11 @@ public class UserController {
 
         return userService.confirmEmail(emailCertify);
     }
+
+    @ApiOperation(value = "bgm 리스트", notes = "bgm 리스트를 반환한다")
+    @GetMapping("/bgmList")
+    public ResponseEntity<?> findBgmList() throws Exception{
+
+        return userService.findBgm();
+    }
 }
