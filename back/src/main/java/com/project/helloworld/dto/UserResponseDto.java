@@ -1,6 +1,7 @@
 package com.project.helloworld.dto;
 
 import com.project.helloworld.domain.Avatar;
+import com.project.helloworld.dto.response.BgmList;
 import com.project.helloworld.dto.response.GrassResponse;
 import com.project.helloworld.security.oauth2.AuthProvider;
 import lombok.Builder;
@@ -41,7 +42,7 @@ public class UserResponseDto {
         private int understandCnt;
         private Long today;
         private Long total;
-        private Avatar avatar;
+        private String avatarUrl;
         private String backgroundUrl;
         private String bgmUrl;
     }
@@ -63,11 +64,11 @@ public class UserResponseDto {
         private int understandCnt;
         private Long today;
         private Long total;
-        private Avatar avatar;
+        private String avatarUrl;
         private String backgroundUrl;
-        private String bgmUrl;
         private List<GrassResponse> grassList;
         private List<FamilyResponseDto> familyResponseDtos;
+        private List<BgmList> bgmList;
 
         public void getFamilyResponseDtos(Object body) {
             this.familyResponseDtos = (List<FamilyResponseDto>) body;
