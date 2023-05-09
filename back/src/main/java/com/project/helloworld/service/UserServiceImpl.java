@@ -1,5 +1,6 @@
 package com.project.helloworld.service;
 
+import com.project.helloworld.domain.Avatar;
 import com.project.helloworld.domain.User;
 import com.project.helloworld.dto.*;
 import com.project.helloworld.repository.UserRepository;
@@ -7,6 +8,7 @@ import com.project.helloworld.security.jwt.JwtTokenProvider;
 import com.project.helloworld.security.oauth2.AuthProvider;
 import com.project.helloworld.util.Authority;
 import com.project.helloworld.security.SecurityUtil;
+import com.project.helloworld.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.nurigo.sdk.NurigoApp;
@@ -26,8 +28,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
@@ -49,7 +54,6 @@ public class UserServiceImpl implements UserService{
     @Value("${spring.sms.sender}")
     private String sender;
 
-
     private final UserRepository userRepository;
     private final Response response;
     private final PasswordEncoder encoder;
@@ -62,12 +66,24 @@ public class UserServiceImpl implements UserService{
     private final FamilyService familyService;
     private final GrassService grassService;
     private final VisitorService visitorService;
+    private final S3Uploader s3Uploader;
+    private final EntityManager em;
     DefaultMessageService messageService;
 
     @Override
-    public ResponseEntity<?> signUp(UserRequestDto.SignUp signUp){
+    public ResponseEntity<?> signUp(UserRequestDto.SignUp signUp, MultipartFile img) throws IOException {
         if(userRepository.existsByEmail(signUp.getEmail())){
             return response.fail("이미 회원가입된 유저입니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        String avatarUrl = null;
+        Avatar avatar = new Avatar();
+        try{
+            avatarUrl = s3Uploader.uploadFiles(img, "avatar");
+            avatar.setImgUrl(avatarUrl);
+            em.persist(avatar);
+        }catch (Exception e){
+            return response.fail("아바타 이미지 업로드 실패", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         User user = User.builder()
@@ -76,6 +92,7 @@ public class UserServiceImpl implements UserService{
                 .password(encoder.encode(signUp.getPassword()))
                 .name(signUp.getName())
                 .phoneNumber(signUp.getPhoneNumber())
+                .avatar(avatar)
                 .roles(Collections.singletonList(Authority.ROLE_USER.name()))
                 .authProvider(AuthProvider.local)
                 .build();
@@ -150,9 +167,8 @@ public class UserServiceImpl implements UserService{
                 .likeCnt(user.getLikeCnt())
                 .helpfulCnt(user.getHelpfulCnt())
                 .understandCnt(user.getUnderstandCnt())
-                .bgmUrl(user.getBgmUrl())
                 .backgroundUrl(user.getBackgroundUrl())
-                .avatar(user.getAvatar())
+                .avatarUrl(user.getAvatar().getImgUrl())
                 .providerId(user.getProviderId())
                 .authProvider(user.getAuthProvider())
                 .build();
@@ -166,6 +182,7 @@ public class UserServiceImpl implements UserService{
 
         Long todayCnt = visitorService.getTodayVisitors(String.valueOf(userSeq));
         Long totalCnt = visitorService.getTotalVisitors(String.valueOf(userSeq));
+
         UserResponseDto.UserMainInfo userMainInfo = UserResponseDto.UserMainInfo.builder()
                 .userSeq(user.getUserSeq())
                 .nickname(user.getNickname())
@@ -177,9 +194,8 @@ public class UserServiceImpl implements UserService{
                 .understandCnt(user.getUnderstandCnt())
                 .today(todayCnt)
                 .total(totalCnt)
-                .bgmUrl(user.getBgmUrl())
                 .backgroundUrl(user.getBackgroundUrl())
-                .avatar(user.getAvatar())
+                .avatarUrl(user.getAvatar().getImgUrl())
                 .build();
 
         LocalDate today = LocalDate.now();
@@ -198,14 +214,24 @@ public class UserServiceImpl implements UserService{
 
     // 회원정보 수정
     @Override
-    public ResponseEntity<?> modify(UserRequestDto.Modify modify) throws Exception{
+    public ResponseEntity<?> modify(UserRequestDto.Modify modify, MultipartFile img) throws Exception{
         User user = userRepository.findById(modify.getUserSeq()).orElseThrow(()-> new Exception("해당하는 유저가 없습니다." + modify.getUserSeq()));
+
+        String avatarUrl = null;
+        Avatar avatar = new Avatar();
+        try{
+            avatarUrl = s3Uploader.uploadFiles(img, "avatar");
+            avatar.setImgUrl(avatarUrl);
+            em.persist(avatar);
+        }catch (Exception e){
+            return response.fail("아바타 이미지 업로드 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
         user.setName(modify.getName());
         user.setNickname(modify.getNickname());
         user.setPhoneNumber(modify.getPhoneNumber());
-//        user.getAvatar().setImgUrl(modify.getAvatar_imgUrl());
-        user.setBgmUrl(modify.getBgmUrl());
+        user.setComment(modify.getComment());
+        user.setAvatar(avatar);
 
         userRepository.save(user);
         return response.success(user, "유저 정보가 수정되었습니다.", HttpStatus.OK);
