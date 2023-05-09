@@ -41,24 +41,24 @@ export default {
                 }
             )
         },
-        data() {
-            return {
-                userSeq: null,
-                userName: null,
-            }
-        },
-        // getGrass: async function () {
-        //     http.get(`/grass?startDate=2022-01-01&endDate=2023-05-01`).then(
-        //         (response)=> {
-        //             console.log(response);
-        //         },
-        //         (error)=> {
-        //             console.log(localStorage.getItem('access-token'))
-        //             console.log(error);
-        //         }
-        //     )
-        // }
     },
+    data() {
+        return {
+            userSeq: null,
+            userName: null,
+        }
+    },
+    // getGrass: async function () {
+    //     http.get(`/grass?startDate=2022-01-01&endDate=2023-05-01`).then(
+    //         (response)=> {
+    //             console.log(response);
+    //         },
+    //         (error)=> {
+    //             console.log(localStorage.getItem('access-token'))
+    //             console.log(error);
+    //         }
+    //     )
+    // }
     mounted() {
         // this.getUser();
         localStorage.setItem("access-token", localStorage.getItem("access-token"));

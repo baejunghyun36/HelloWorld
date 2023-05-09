@@ -22,7 +22,7 @@ export default {
                     localStorage.setItem("refresh-token", response.data.data.refreshToken);
                     localStorage.setItem("user-seq", response.data.data.userSeq);
                     // window.location.replace('https://k8a308.p.ssafy.io/mainpage');
-                    this.$router.replace({name: 'mainpage', params: {userSeq: response.data.data.userSeq}});
+                    this.$router.replace({path: `/mainpage/${response.data.data.userSeq}`});
                 },
                 (error) => {
                     console.log(error);
