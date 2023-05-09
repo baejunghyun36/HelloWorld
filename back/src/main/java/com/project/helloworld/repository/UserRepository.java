@@ -14,7 +14,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByPhoneNumber(String phoneNumber);
     boolean deleteByUserSeq(Long userSeq);
     boolean existsByEmail(String email);
-    @Modifying
-    @Query("UPDATE User u SET u.total = :total WHERE u.userSeq = :userSeq")
-    void updateTotalByUserSeq(Long userSeq, int total);
 }
