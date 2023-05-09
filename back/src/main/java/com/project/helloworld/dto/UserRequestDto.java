@@ -54,8 +54,7 @@ public class UserRequestDto {
         private String name;
         private String nickname;
         private String phoneNumber;
-        private String avatar_imgUrl;
-        private String bgmUrl;
+        private String comment;
     }
 
     @Getter

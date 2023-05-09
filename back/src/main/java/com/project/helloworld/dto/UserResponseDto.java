@@ -41,7 +41,7 @@ public class UserResponseDto {
         private int understandCnt;
         private Long today;
         private Long total;
-        private Avatar avatar;
+        private String avatarUrl;
         private String backgroundUrl;
         private String bgmUrl;
     }
@@ -63,7 +63,7 @@ public class UserResponseDto {
         private int understandCnt;
         private Long today;
         private Long total;
-        private Avatar avatar;
+        private String avatarUrl;
         private String backgroundUrl;
         private String bgmUrl;
         private List<GrassResponse> grassList;
