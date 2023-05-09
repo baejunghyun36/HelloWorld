@@ -32,10 +32,10 @@ public class UserController {
     @ApiOperation(value = "회원가입", notes = "id, email, password, nickname, name")
     @PostMapping(value = "/signUp", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<?> signUp(@Validated @RequestPart(value = "key") UserRequestDto.SignUp signUp,
-                                    @RequestPart(value = "file", required = false) MultipartFile file) throws Exception{
+                                    @RequestPart(value = "img", required = false) MultipartFile img) throws Exception{
         log.debug("singUp", signUp);
 
-        return userService.signUp(signUp, file);
+        return userService.signUp(signUp, img);
     }
 
     @ApiOperation(value = "일반 로그인", notes = "id, password")
@@ -63,11 +63,12 @@ public class UserController {
     }
 
     @ApiOperation(value = "회원정보 수정", notes = "name, nickName, phoneNumber 입력받음")
-    @PutMapping("/modify")
-    public ResponseEntity<?> modify(@Validated @RequestBody UserRequestDto.Modify modify) throws Exception{
+    @PutMapping(value = "/modify",  consumes = { MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<?> modify(@Validated @RequestPart(value = "key") UserRequestDto.Modify modify,
+                                    @RequestPart(value = "img", required = false) MultipartFile img) throws Exception{
         log.debug("modifyInfo", modify);
 
-        return userService.modify(modify);
+        return userService.modify(modify, img);
     }
 
     @ApiOperation(value = "비밀번호 변경", notes = "userSeq, password 전달받음")
