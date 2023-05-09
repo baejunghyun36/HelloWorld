@@ -19,5 +19,5 @@ public interface UserService {
     ResponseEntity<?> confirmMessage(UserRequestDto.SmsCertify smsCertify) throws Exception;
     ResponseEntity<?> logout(UserRequestDto.Logout logout) throws Exception;
 
-    ResponseEntity<?> findBgm() throws Exception;
+
 }
