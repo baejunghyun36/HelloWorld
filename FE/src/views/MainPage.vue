@@ -32,6 +32,7 @@ export default {
             // });ole.log(user);
             http.get(`/user/userInfo/${localStorage.getItem("user-seq")}`).then(
                 (response)=> {
+                    this.userName = response.data.data.nickname;
                     localStorage.setItem("user-nickname", response.data.data.nickname);
                     // console.log(response.data.data.nickname);
                 },
@@ -39,6 +40,12 @@ export default {
                     console.log(error);
                 }
             )
+        },
+        data() {
+            return {
+                userSeq: null,
+                userName: null,
+            }
         },
         // getGrass: async function () {
         //     http.get(`/grass?startDate=2022-01-01&endDate=2023-05-01`).then(
@@ -57,6 +64,11 @@ export default {
         localStorage.setItem("access-token", localStorage.getItem("access-token"));
         localStorage.setItem("refresh-token", localStorage.getItem("refresh-token"));
         localStorage.setItem("user-seq", localStorage.getItem("user-seq"));
+    },
+    created() {
+        let param = this.$route.params.userSeq;
+        this.userSeq = param;
+        this.getUser();
     }
 };
 </script>
