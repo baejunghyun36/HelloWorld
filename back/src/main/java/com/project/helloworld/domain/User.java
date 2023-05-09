@@ -7,6 +7,7 @@ import com.project.helloworld.util.BaseTimeEntity;
 import javax.persistence.*;
 
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -43,8 +44,23 @@ public class User extends BaseTimeEntity implements UserDetails {
   @Column(name = "name")
   private String name;
 
+  @Column(name = "comment")
+  private String comment;
+
   @Column(name = "phone_number", unique = true)
   private String phoneNumber;
+
+  @Column(name = "like_cnt")
+  @ColumnDefault("0")
+  private int likeCnt;
+
+  @Column(name = "helpful_cnt")
+  @ColumnDefault("0")
+  private int helpfulCnt;
+
+  @Column(name = "understand_cnt")
+  @ColumnDefault("0")
+  private int understandCnt;
 
   @Column(name = "bgm_url")
   private String bgmUrl;
@@ -55,11 +71,8 @@ public class User extends BaseTimeEntity implements UserDetails {
   @Column(name = "providerId")
   private String providerId;
 
-  @Column(name = "today")
-  private int today;
-
   @Column(name = "total")
-  private int total;
+  private Long total;
 
   @Column(name = "background_url")
   private String backgroundUrl;
@@ -95,6 +108,10 @@ public class User extends BaseTimeEntity implements UserDetails {
   @JsonIgnore
   @OneToMany(mappedBy = "user")
   List<Sticker> stickers = new ArrayList<>();
+
+  @JsonIgnore
+  @OneToMany(mappedBy = "user")
+  List<TodayVisit> todayVisits = new ArrayList<>();
 
   /**
    * Security 관련 메소드
