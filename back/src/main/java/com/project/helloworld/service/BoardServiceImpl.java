@@ -4,7 +4,8 @@ import com.project.helloworld.domain.*;
 import com.project.helloworld.dto.MessageResponse;
 import com.project.helloworld.dto.request.*;
 import com.project.helloworld.dto.response.BoardDetailResponse;
-import com.project.helloworld.dto.response.BoardListResponse;
+import com.project.helloworld.dto.response.BoardsAllResponse;
+import com.project.helloworld.dto.response.BoardsByUserResponse;
 import com.project.helloworld.elkStack.domain.BoardDocument;
 
 import com.project.helloworld.repository.*;
@@ -28,7 +29,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -112,14 +112,15 @@ public class BoardServiceImpl implements BoardService{
         // Page 객체로    https://wonit.tistory.com/483 참고
         // 제목 ,작성자, 내용, 썸네일, 스티커 개수, 댓글 개수
         PageRequest pageRequest = PageRequest.of(start,size);
-        List<BoardListResponse> boardList = boardRepository.findAll(pageRequest)
-                .stream().map(x -> new BoardListResponse(x.getBoardSeq(),x.getTitle(),x.getUser().getName(),x.getCreateTime(),x.getViewCnt())).collect(Collectors.toList());
+        List<BoardsAllResponse> boardList = boardRepository.findAll(pageRequest)
+                .stream().map(x -> new BoardsAllResponse(x.getBoardSeq(),x.getTitle(),x.getUser().getName()
+                        ,x.getContent(),x.getThumbnailImgUrl(),x.getLikeCnt(),x.getCommentCnt())).collect(Collectors.toList());
         return ResponseEntity.ok().body(boardList);
     }
 
     @Override
     public ResponseEntity<?> getBoardsByUser(Long userSeq, int start, int size) throws Exception {
-        // 제목, 작성자, 작성일, 조회수 , 카테고리 
+        // 제목, 작성자, 작성일, 조회수 , 카테고리
         User user = userRepository.findById(userSeq).orElseThrow(() -> new Exception("not exist user : "+userSeq));
         PageRequest pageRequest = PageRequest.of(start,size);
         Board board = Board.builder().user(user).build();
@@ -127,9 +128,10 @@ public class BoardServiceImpl implements BoardService{
                 .withIgnorePaths("boardSeq","title","content","imgUrl","viewCnt","likeCnt","helpfulCnt","understandCnt","categorySeq","comments"
                         ,"grasses","stickers","bookMarks");
         Example<Board> example = Example.of(board, matcher);
+        List<BoardsByUserResponse> boardList = boardRepository.findAll(example,pageRequest)
+                .stream().map(x -> new BoardsByUserResponse(x.getBoardSeq(),x.getTitle(),x.getUser().getName(),x.getCreateTime(),x.getViewCnt())).collect(Collectors.toList());
 
-
-        return ResponseEntity.ok().body(boardRepository.findAll(example,pageRequest).stream().map(x -> x.getTitle()).collect(Collectors.toList()));
+        return ResponseEntity.ok().body(boardList);
     }
 
     @Override
