@@ -598,8 +598,9 @@
 
 <script>
 import { Splide, SplideSlide } from '@splidejs/vue-splide';
-// import html2canvas from 'html2canvas';
-import http from '@/api/http';
+import html2canvas from 'html2canvas';
+// import http from '@/api/http';
+import axios from 'axios';
 // Default theme
 import '@splidejs/vue-splide/css';
 export default {
@@ -685,29 +686,44 @@ export default {
                 this.pantsSrc = path;
             }
         },
-        join: function () {
-            // var userAvatar;
-            // await html2canvas(document.querySelector("#my-character-container")).then(function (canvas) {
-            //     userAvatar = canvas.toDataURL();
-            // });
+        join: async function () {
+            var userAvatar;
+            await html2canvas(document.querySelector("#my-character-container")).then(function (canvas) {
+                userAvatar = canvas.toDataURL("image/png");
+                // userAvatar = userAvatar.replace("data:image/png;base64,", "");
+            });
             var user= {
                 email: this.email,
                 name: this.userName,
                 nickname: this.nickname,
                 password: this.password,
                 phoneNumber: this.phonenum,
-                // userAvatar: userAvatar,
             }
             console.log(user);
-            http.post(`/user/signUp`, JSON.stringify(user)).then(
-                (response)=> {
-                    console.log(response);
-                    this.$router.push({name: 'login'});
-                },
-                (error)=> {
-                    console.log(error);
-                }
-            )
+            var formData = new FormData();
+
+            formData.append("user", JSON.stringify(user));
+            
+            formData.append("img", userAvatar);
+            console.log(userAvatar);
+            // console.log(user);
+            // http.post(`/user/signUp`, JSON.stringify(user)).then(
+            //     (response)=> {
+            //         console.log(response);
+            //         this.$router.push({name: 'login'});
+            //     },
+            //     (error)=> {
+            //         console.log(error);
+            //     }
+            // )
+            axios.post(`https://k8a308.p.ssafy.io/api/user/signUp`, formData, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+            }).then((response)=> {
+                console.log(response);
+                this.$router.push({name: 'login'});
+            }, (error)=>{
+                console.log(error);
+            });
         }
     },
 }
