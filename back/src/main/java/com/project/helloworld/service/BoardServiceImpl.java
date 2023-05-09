@@ -3,6 +3,7 @@ package com.project.helloworld.service;
 import com.project.helloworld.domain.*;
 import com.project.helloworld.dto.MessageResponse;
 import com.project.helloworld.dto.request.*;
+import com.project.helloworld.dto.response.BoardCategoryCountResponse;
 import com.project.helloworld.dto.response.BoardDetailResponse;
 import com.project.helloworld.dto.response.BoardsAllResponse;
 import com.project.helloworld.dto.response.BoardsByUserResponse;
@@ -345,6 +346,12 @@ public class BoardServiceImpl implements BoardService{
             .collect(Collectors.toList());
 
         return ResponseEntity.ok().body(results);
+    }
+
+    @Override
+    public ResponseEntity<?> getCategoryByUser(Long userSeq) throws Exception {
+        List<BoardCategoryCountResponse> categoryList = boardRepository.boardCategoryCount(userSeq);
+        return ResponseEntity.ok().body(categoryList);
     }
 
     public ResponseEntity<Set<Object>> getTop10KeywordsByRedis() {

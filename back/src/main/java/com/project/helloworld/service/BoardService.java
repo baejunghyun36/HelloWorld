@@ -33,4 +33,6 @@ public interface BoardService {
     ResponseEntity<?> getTop10KeywordsByRedis() throws Exception;
 
     ResponseEntity<?> searchByKeyword(String searchTerm, int page)throws Exception;
+
+    ResponseEntity<?> getCategoryByUser(Long userSeq) throws Exception;
 }

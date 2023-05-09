@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -181,19 +182,19 @@ public class FamilyServiceImpl implements FamilyService {
     }
 
     @Override
-    public ResponseEntity<?> getFamiliesWind(Long userSeq) throws Exception {
+    public ResponseEntity<?> getFamiliesWind(Long userSeq, String keyword) throws Exception {
         User user = userRepository.findById(userSeq).orElseThrow(()-> new Exception("not exist user : " + userSeq));
         List<Family> families = user.getFamilies();
         Collections.sort(families,Collections.reverseOrder(
                 (a,b) -> {
-                    Long aToday = (long)a.getFamilyUser().getToday();
-                    Long bToday = (long)b.getFamilyUser().getToday();
+                    LocalDateTime aTime = a.getCreateTime();
+                    LocalDateTime bTime = b.getCreateTime();
 
-                    return aToday.compareTo(bToday);
-
+                    return aTime.compareTo(bTime);
                 }
         ));
-        List<FamilyResponseDto> familyResponseDtos = families.stream().filter(data -> data.getIsAccepted() == 2 ).map(x -> new FamilyResponseDto(x)).collect(Collectors.toList());
+        List<FamilyResponseDto> familyResponseDtos = families.stream().filter(data -> data.getIsAccepted() == 2 )
+                .filter(data -> keyword == null || data.getFamilyUser().getName().contains(keyword) ).map(x -> new FamilyResponseDto(x)).collect(Collectors.toList());
         return ResponseEntity.ok().body(familyResponseDtos);
     }
 
