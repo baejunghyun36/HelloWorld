@@ -14,7 +14,7 @@
             </select>
             <div class="edit-and-history">
                 <router-link to="/modify-user">
-                <div class="edit-btn">
+                <div class="edit-btn" v-if="this.userSeq==this.masterSeq">
                     <div class="blue-arrow">▶</div>
                     <div class="edit">EDIT</div>
                 </div>
@@ -43,6 +43,8 @@ export default {
                 { name: "name2", value: "b" },
                 { name: "name3", value: "c" },
             ],
+            userSeq: localStorage.getItem('user-seq'),
+            masterSeq: this.$route.params.userSeq,
         };
     },
 };
