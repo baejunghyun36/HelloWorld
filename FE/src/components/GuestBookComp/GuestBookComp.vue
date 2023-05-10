@@ -94,6 +94,7 @@ const formatDate = (dateString) => {
 };
 
 const minihomeMaster = ref(1);
+//const minihomeMaster = ref(`${route.params.userSeq}`);
 const userSeq = ref(`${localStorage.getItem("user-seq")}`);
 const start = ref(0);
 const size = ref(10);
