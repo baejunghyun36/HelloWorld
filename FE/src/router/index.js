@@ -14,6 +14,7 @@ import Statistic from '@/views/StatisticView.vue'
 import RedirectHandler from '@/views/UserView/login/RedirectHandle.vue'
 import Community from '@/views/CommunityView.vue';
 
+
 const routes = [
   {
     path: "/",
@@ -83,7 +84,7 @@ const routes = [
     path: "/community/:userSeq",
     name: "community",
     component: Community,
-  }
+  },
 ];
 
 const router = createRouter({
