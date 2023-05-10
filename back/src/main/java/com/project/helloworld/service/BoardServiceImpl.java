@@ -10,6 +10,9 @@ import com.project.helloworld.dto.response.BoardsByUserResponse;
 import com.project.helloworld.elkStack.domain.BoardDocument;
 
 import com.project.helloworld.repository.*;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -116,7 +119,12 @@ public class BoardServiceImpl implements BoardService{
         List<BoardsAllResponse> boardList = boardRepository.findAll(pageRequest)
                 .stream().map(x -> new BoardsAllResponse(x.getBoardSeq(),x.getTitle(),x.getUser().getName()
                         ,x.getContent(),x.getThumbnailImgUrl(),x.getLikeCnt(),x.getCommentCnt())).collect(Collectors.toList());
-        return ResponseEntity.ok().body(boardList);
+
+        int boardListCount = boardRepository.findAll().size();
+        HashMap<String,Object> boardInformation = new HashMap<>();
+        boardInformation.put("boardList",boardList);
+        boardInformation.put("boardCount",boardListCount);
+        return ResponseEntity.ok().body(boardInformation);
     }
 
     @Override
@@ -131,8 +139,11 @@ public class BoardServiceImpl implements BoardService{
         Example<Board> example = Example.of(board, matcher);
         List<BoardsByUserResponse> boardList = boardRepository.findAll(example,pageRequest)
                 .stream().map(x -> new BoardsByUserResponse(x.getBoardSeq(),x.getTitle(),x.getUser().getName(),x.getCreateTime(),x.getViewCnt())).collect(Collectors.toList());
-
-        return ResponseEntity.ok().body(boardList);
+        int boardListCount = boardRepository.findAll(example).size();
+        HashMap<String,Object> boardInformation = new HashMap<>();
+        boardInformation.put("boardList",boardList);
+        boardInformation.put("boardCount",boardListCount);
+        return ResponseEntity.ok().body(boardInformation);
     }
 
     @Override
