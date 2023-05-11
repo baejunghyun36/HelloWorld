@@ -98,10 +98,7 @@ public class familyController {
         return ResponseEntity.ok().body(familyService.recommendFamily(userSeq));
     }
 
-    @GetMapping("/bbb")
-    ResponseEntity<?> bbb(@RequestParam Long a,@RequestParam Long b) throws Exception {
-        return ResponseEntity.ok().body(familyService.getFamilyByUser(a,b));
-    }
+   
 
 
 
