@@ -26,6 +26,7 @@ public class UserController {
 
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @ApiOperation(value = "회원가입", notes = "id, email, password, nickname, name")
     @PostMapping(value = "/signUp", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE })
@@ -87,8 +88,10 @@ public class UserController {
 
     @ApiOperation(value = "회원 탈퇴", notes = "token")
     @DeleteMapping("/delete")
-    public ResponseEntity<?> delete(@RequestHeader("Authorization") String token) throws Exception{
-        log.debug("token", token);
+    public ResponseEntity<?> delete(HttpServletRequest request) throws Exception{
+        log.debug("request", request);
+
+        String token = jwtAuthenticationFilter.parseBearerToken(request);
         Long userSeq = jwtTokenProvider.getUserSeq(token);
 
         return userService.delete(userSeq);
