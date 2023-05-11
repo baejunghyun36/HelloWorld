@@ -305,6 +305,8 @@ public class UserServiceImpl implements UserService{
     public ResponseEntity<?> delete(Long userSeq) throws Exception{
         User user = userRepository.findByUserSeq(userSeq).orElseThrow(()-> new Exception("해당하는 유저가 없습니다." + userSeq));
         userRepository.deleteByUserSeq(userSeq);
+        // 회원탈퇴와 함께 redis에 저장된 RT도 만료
+        redisTemplate.expire("RT:" + user.getEmail(), 0, TimeUnit.SECONDS);
         return response.success("", "회원 탈퇴 성공했습니다.", HttpStatus.OK);
     }
 
