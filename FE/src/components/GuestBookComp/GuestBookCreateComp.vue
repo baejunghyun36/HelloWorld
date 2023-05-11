@@ -23,6 +23,7 @@ const headers = {
     Authorization: `Bearer ${localStorage.getItem("access-token")}`,
   };
 const minihomeMaster = ref(1);
+//const minihomeMaster = ref(`${route.params.userSeq}`);
 const userSeq = ref(`${localStorage.getItem("user-seq")}`);
 
 const showCreateComp = computed(() => {
