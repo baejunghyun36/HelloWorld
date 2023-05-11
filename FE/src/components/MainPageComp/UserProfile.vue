@@ -10,7 +10,7 @@
             <p class="one-line-desc" v-if="this.oneLineDesc!=null">{{this.oneLineDesc}}</p>
             <p class="one-line-desc-null" v-if="this.oneLineDesc==null">한 줄 소개가 없습니다</p>
             <div class="blank"></div>
-            <select class="wave" v-model="selected2">
+            <select class="wave" v-model="selected2" @change="mvMainPage">
                 <option v-for="(item, index) in selectList" :key="index" :value="item.value">{{ item.name }}</option>
             </select>
             <div class="edit-and-history">
@@ -47,6 +47,19 @@ export default {
             oneLineDesc: null,
         };
     },
+    methods: {
+        mvMainPage: function(e) {
+            e.preventDefault();
+            var toUserSeq = e.target.value;
+            var link = document.location.href;
+            if (link.includes('localhost')) {
+                window.location.replace(`http://localhost:8081/mainpage/${toUserSeq}`);
+            }
+            else {
+                window.location.replace(`https://k8a308.p.ssafy.io/mainpage/${toUserSeq}`);
+            }
+        }
+    },
     mounted() {
         http.get(`/user/mainpage/${this.masterSeq}`).then((result) => {
             this.avatarUrl = result.data.data.avatarUrl;
@@ -57,7 +70,7 @@ export default {
         http.get(`/family/recommend?userSeq=${this.masterSeq}`).then((result) => {
             var temp = result.data.body;
             for(var i = 0; i < temp.length; i++) {
-                this.selectList.push({name: temp[i], value: ''});
+                this.selectList.push({name: temp[i].nickname, value: temp[i].userSeq});
             }
         }, (error) => {
             console.log(error);

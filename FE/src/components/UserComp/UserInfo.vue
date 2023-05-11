@@ -134,10 +134,7 @@ export default {
         }
     },
     created() {
-        var link = document.location.href; 
-        console.log(link);
         http.get(`/user/userInfo/${this.userSeq}`).then((result) => {
-            console.log(result.data.data);
             this.userEmail = result.data.data.email;
             this.userNickname = result.data.data.nickname;
             this.userName = result.data.data.name;
