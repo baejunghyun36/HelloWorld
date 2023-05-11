@@ -26,12 +26,10 @@ public class UserController {
 
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
-    private final VisitorService visitorService;
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @ApiOperation(value = "회원가입", notes = "id, email, password, nickname, name")
     @PostMapping(value = "/signUp", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<?> signUp(@Validated @RequestPart(value = "key") UserRequestDto.SignUp signUp,
+    public ResponseEntity<?> signUp(@Validated @ModelAttribute(value = "user") UserRequestDto.SignUp signUp,
                                     @RequestPart(value = "img", required = false) MultipartFile img) throws Exception{
         log.debug("singUp", signUp);
 
@@ -64,7 +62,7 @@ public class UserController {
 
     @ApiOperation(value = "회원정보 수정", notes = "name, nickName, phoneNumber 입력받음")
     @PutMapping(value = "/modify",  consumes = { MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<?> modify(@Validated @RequestPart(value = "key") UserRequestDto.Modify modify,
+    public ResponseEntity<?> modify(@Validated @ModelAttribute(value = "user") UserRequestDto.Modify modify,
                                     @RequestPart(value = "img", required = false) MultipartFile img) throws Exception{
         log.debug("modifyInfo", modify);
 
@@ -141,5 +139,4 @@ public class UserController {
 
         return userService.getUserMainInfo(userSeq);
     }
-
 }
