@@ -14,12 +14,10 @@
                 <option v-for="(item, index) in selectList" :key="index" :value="item.value">{{ item.name }}</option>
             </select>
             <div class="edit-and-history">
-                <router-link :to="`/modify-user/${this.masterSeq}`">
-                <div class="edit-btn" v-if="this.userSeq==this.masterSeq">
+                <div class="edit-btn" v-if="this.userSeq==this.masterSeq" @click="mvEdit">
                     <div class="blue-arrow">▶</div>
                     <div class="edit">EDIT</div>
                 </div>
-            </router-link>
                 <div class="history-btn">
                     <div class="blue-arrow">▶ </div>
                     <div class="history">HISTORY</div>
@@ -57,6 +55,15 @@ export default {
             }
             else {
                 window.location.replace(`https://k8a308.p.ssafy.io/mainpage/${toUserSeq}`);
+            }
+        },
+        mvEdit: function() {
+            var link = document.location.href;
+            if (link.includes('localhost')) {
+                window.location.replace(`http://localhost:8081/modify-user/${this.masterSeq}`);
+            }
+            else {
+                window.location.replace(`https://k8a308.p.ssafy.io/modify-user/${this.masterSeq}`);
             }
         }
     },
