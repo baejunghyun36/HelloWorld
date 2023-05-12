@@ -77,6 +77,9 @@ public class UserServiceImpl implements UserService{
     private final S3Uploader s3Uploader;
     private final EntityManager em;
     DefaultMessageService messageService;
+    private String ownerPrefix = "owner:";
+    private String todayVisitor = " todayVisitor";
+    private String totalVisitor = " totalVisitor";
 
     @Override
     public ResponseEntity<?> signUp(UserRequestDto.SignUp signUp, MultipartFile img) throws IOException {
@@ -172,6 +175,7 @@ public class UserServiceImpl implements UserService{
                 .nickname(user.getNickname())
                 .name(user.getName())
                 .phoneNumber(user.getPhoneNumber())
+                .comment(user.getComment())
                 .today(today)
                 .total(total)
                 .likeCnt(user.getLikeCnt())
@@ -182,6 +186,12 @@ public class UserServiceImpl implements UserService{
                 .providerId(user.getProviderId())
                 .authProvider(user.getAuthProvider())
                 .build();
+
+        String userEmail = SecurityUtil.getCurrentUserEmail();
+        user = userRepository.findByEmail(userEmail).orElseThrow(()-> new Exception("해당하는 유저가 없습니다." + userSeq));
+        Long visitorSeq = user.getUserSeq();
+        Long masterSeq = userSeq;
+        userInfo.setIsFamily(familyService.getFamilyByUser(masterSeq, visitorSeq));
 
         return response.success(userInfo, "유저 정보가 조회되었습니다.", HttpStatus.OK);
     }
@@ -247,8 +257,8 @@ public class UserServiceImpl implements UserService{
         String userEmail = SecurityUtil.getCurrentUserEmail();
         user = userRepository.findByEmail(userEmail).orElseThrow(()-> new Exception("해당하는 유저가 없습니다." + userSeq));
         Long visitorSeq = user.getUserSeq();
-        Long masterSEq = userSeq;
-        userMainInfo.setIsFamily(familyService.getFamilyByUser(masterSEq, visitorSeq));
+        Long masterSeq = userSeq;
+        userMainInfo.setIsFamily(familyService.getFamilyByUser(masterSeq, visitorSeq));
 
         return response.success(userMainInfo, "유저 메인페이지 정보 조회가 성공했습니다.", HttpStatus.OK);
     }
@@ -305,6 +315,13 @@ public class UserServiceImpl implements UserService{
     public ResponseEntity<?> delete(Long userSeq) throws Exception{
         User user = userRepository.findByUserSeq(userSeq).orElseThrow(()-> new Exception("해당하는 유저가 없습니다." + userSeq));
         userRepository.deleteByUserSeq(userSeq);
+        // 회원탈퇴와 함께 redis에 저장된 RT, Today, Total 모두 만료
+        redisTemplate.expire("RT:" + user.getEmail(), 0, TimeUnit.SECONDS);
+        String todayVisitorKey = ownerPrefix + userSeq + todayVisitor;
+        String totalVisitorKey = ownerPrefix + userSeq + totalVisitor;
+        redisTemplate.expire(todayVisitorKey, 0, TimeUnit.SECONDS);
+        redisTemplate.expire(totalVisitorKey, 0, TimeUnit.SECONDS);
+
         return response.success("", "회원 탈퇴 성공했습니다.", HttpStatus.OK);
     }
 

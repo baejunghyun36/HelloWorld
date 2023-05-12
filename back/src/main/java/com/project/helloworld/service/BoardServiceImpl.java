@@ -334,7 +334,7 @@ public class BoardServiceImpl implements BoardService{
     @Cacheable(value = "searchResults", key = "#searchTerm")
     public ResponseEntity<?> searchByKeyword(String searchTerm, int page) {
         // 로그 메시지 추가
-        log.info("Searching by searchTerm: {}", searchTerm);
+        //log.info("Searching by searchTerm: {}", searchTerm);
 
         // 레디스에 검색어 빈도를 저장
         keywordCount.incrementSearchTermCount(searchTerm);
@@ -360,9 +360,9 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public ResponseEntity<?> getCategoryByUser(Long userSeq) throws Exception {
+    public List<BoardCategoryCountResponse> getCategoryByUser(Long userSeq) throws Exception {
         List<BoardCategoryCountResponse> categoryList = boardRepository.boardCategoryCount(userSeq);
-        return ResponseEntity.ok().body(categoryList);
+        return categoryList;
     }
 
     public ResponseEntity<Set<Object>> getTop10KeywordsByRedis() {
