@@ -175,6 +175,7 @@ public class UserServiceImpl implements UserService{
                 .nickname(user.getNickname())
                 .name(user.getName())
                 .phoneNumber(user.getPhoneNumber())
+                .comment(user.getComment())
                 .today(today)
                 .total(total)
                 .likeCnt(user.getLikeCnt())
