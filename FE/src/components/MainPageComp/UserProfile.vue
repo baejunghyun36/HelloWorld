@@ -8,7 +8,7 @@
                 <img class="profile-img" :src=this.avatarUrl alt="프로필 사진" />
             </div>
             <p class="one-line-desc" v-if="this.oneLineDesc!=null">{{this.oneLineDesc}}</p>
-            <p class="one-line-desc-null" v-if="this.oneLineDesc==null">한 줄 소개가 없습니다</p>
+            <p class="one-line-desc-null" v-if="this.oneLineDesc==null || this.oneLineDesc==''">한 줄 소개가 없습니다</p>
             <div class="blank"></div>
             <select class="wave" v-model="selected2" @change="mvMainPage">
                 <option v-for="(item, index) in selectList" :key="index" :value="item.value">{{ item.name }}</option>
@@ -18,10 +18,10 @@
                     <div class="blue-arrow">▶</div>
                     <div class="edit">EDIT</div>
                 </div>
-                <div class="history-btn">
+                <!-- <div class="history-btn">
                     <div class="blue-arrow">▶ </div>
                     <div class="history">HISTORY</div>
-                </div>
+                </div> -->
             </div>
             <hr class="divider"/>
         </div>
