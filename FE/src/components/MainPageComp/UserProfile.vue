@@ -60,10 +60,12 @@ export default {
         mvEdit: function() {
             var link = document.location.href;
             if (link.includes('localhost')) {
-                window.location.replace(`http://localhost:8081/modify-user/${this.masterSeq}`);
+                // window.location.replace(`http://localhost:8081/modify-user/${this.masterSeq}`);
+                this.$router.push({name: 'modify-user', params: {userSeq: localStorage.getItem('user-seq')}})
             }
             else {
-                window.location.replace(`https://k8a308.p.ssafy.io/modify-user/${this.masterSeq}`);
+                // window.location.replace(`https://k8a308.p.ssafy.io/modify-user/${this.masterSeq}`);
+                this.$router.push({name: 'modify-user', params: {userSeq: localStorage.getItem('user-seq')}})
             }
         }
     },

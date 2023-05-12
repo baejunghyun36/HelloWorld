@@ -10,8 +10,8 @@
       width="500" height="40" autohide="0" /> -->
     </div>
     <router-view></router-view>
-    <!-- <VueYtframe video-id="6ZUIwj3FgUY" height=0 width=0
-                    :player-vars="{ loop: 1, autoplay: 1, listType: 'user_uploads' }" /> -->
+    <VueYtframe video-id="6ZUIwj3FgUY" height=0 width=0
+                    :player-vars="{ loop: 1, autoplay: 1, listType: 'user_uploads'}" v-if="this.userSeq!=null"/>
   </div>
 </template>
 
@@ -21,6 +21,14 @@ export default {
   components: {
 
   },
+  data() {
+    return {
+      userSeq: localStorage.getItem('user-seq'),
+    }
+  },
+  created() {
+    console.log(this.userSeq);
+  }
 }
 </script>
 

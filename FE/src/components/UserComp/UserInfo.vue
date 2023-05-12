@@ -142,10 +142,12 @@ export default {
                 console.log(result);
                 var link = document.location.href;
                 if (link.includes('localhost')) {
-                    window.location.replace(`http://localhost:8081/mainpage/${localStorage.getItem('user-seq')}`);
+                    // window.location.replace(`http://localhost:8081/mainpage/${localStorage.getItem('user-seq')}`);
+                    this.$router.push({name: 'mainpage', params: { userSeq: localStorage.getItem('user-seq') }})
                 }
                 else {
-                    window.location.replace(`https://k8a308.p.ssafy.io/mainpage/${localStorage.getItem('user-seq')}`);
+                    // window.location.replace(`https://k8a308.p.ssafy.io/mainpage/${localStorage.getItem('user-seq')}`);
+                    this.$router.push({name: 'mainpage', params: { userSeq: localStorage.getItem('user-seq') }})
                 }
             }, (error) => {
                 console.log(error);
