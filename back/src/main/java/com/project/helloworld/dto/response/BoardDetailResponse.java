@@ -14,6 +14,8 @@ public class BoardDetailResponse {
 
     private String writer;
 
+    private Long userSeq;
+
     private String title;
 
     private Integer categorySeq;
@@ -33,22 +35,26 @@ public class BoardDetailResponse {
     // 왜 static 아니면 못할까?
     public static class Comment{
         private String writer;
+
+        private Long userSeq;
         private String content;
 
         private LocalDateTime createTime;
 
         @Builder
-        public Comment(String writer, String content, LocalDateTime createTime) {
+        public Comment(String writer,Long userSeq, String content, LocalDateTime createTime) {
             this.writer = writer;
+            this.userSeq = userSeq;
             this.content = content;
             this.createTime = createTime;
         }
     }
 
     @Builder
-    public BoardDetailResponse(String writer, String title, String imgUrl, String content, Integer categorySeq,
+    public BoardDetailResponse(String writer,Long userSeq, String title, String imgUrl, String content, Integer categorySeq,
                                Boolean[] sticker, LocalDateTime createTime, List<Comment> comments) {
         this.writer = writer;
+        this.userSeq = userSeq;
         this.title = title;
         this.imgUrl = imgUrl;
         this.content = content;
