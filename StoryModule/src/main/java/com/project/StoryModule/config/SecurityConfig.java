@@ -67,12 +67,12 @@ public class SecurityConfig {
                 .authorizeRequests() // 보호된 리소스 URI에 접근할 수 있는 권한 설정
                 // 로그인, 회원가입 접근 허용
                 .antMatchers("/**/signIn", "/**/signUp", "/**/user/findId/**", "/**/user/findPassword/**"
-                        ,"/reissue").permitAll();
+                        ,"/reissue").permitAll()
         // swagger 페이지 접근 허용
         /**
          * swagger 테스트 할때는 밑줄을 주석 처리하면 됩니다.
          */
-//                .anyRequest().authenticated(); // 다른 경로는 인증필요
+                .anyRequest().authenticated(); // 다른 경로는 인증필요
 
         return http.build();
     }
