@@ -5,33 +5,12 @@
             <div class="story">
                 <div class="select-story">
                     <splide :options="options" class="slider">
-                        <splide-slide class="splide-slide">
+                        <splide-slide class="splide-slide" v-for="stories in this.story" :key="stories">
                             <div class="one-slide">
-                                <div class="story-element-container" v-for="rs in this.readStory" :key="rs">
-                                    <img class="story-element" :src="`${rs.imgUrl}`" alt="스토리" />
+                                <div class="story-element-container" v-for="oneStory in stories" :key="oneStory" @click="showStoryInfo" :id="`${oneStory.boardSeq}`">
+                                    <img class="story-element" src="@/assets/KakaoTalk_20230116_110321475_05.jpg" alt="스토리" v-if="oneStory.imgUrl==''" :id="`${oneStory.boardSeq}`"/>
+                                    <img class="story-element" :src="`${oneStory.imgUrl}`" alt="스토리" v-if="oneStory.imgUrl!=''" :id="`${oneStory.boardSeq}`"/>
                                 </div>
-                            </div>
-                        </splide-slide>
-                        <splide-slide class="splide-slide">
-                            <div class="one-slide">
-                                <div class="story-element-container"><img class="story-element"
-                                        src="@/assets/image/Person.png" alt="스토리" /></div>
-                                <div class="story-element-container"><img class="story-element"
-                                        src="@/assets/image/Person.png" alt="스토리" /></div>
-                                <div class="story-element-container"><img class="story-element"
-                                        src="@/assets/image/Person.png" alt="스토리" /></div>
-                                <div class="story-element-container"><img class="story-element"
-                                        src="@/assets/image/Person.png" alt="스토리" /></div>
-                                <div class="story-element-container"><img class="story-element"
-                                        src="@/assets/image/Person.png" alt="스토리" /></div>
-                                <div class="story-element-container"><img class="story-element"
-                                        src="@/assets/image/Person.png" alt="스토리" /></div>
-                                <div class="story-element-container"><img class="story-element"
-                                        src="@/assets/image/Person.png" alt="스토리" /></div>
-                                <div class="story-element-container"><img class="story-element"
-                                        src="@/assets/image/Person.png" alt="스토리" /></div>
-                                <div class="story-element-container"><img class="story-element"
-                                        src="@/assets/image/Person.png" alt="스토리" /></div>
                             </div>
                         </splide-slide>
                     </splide>
@@ -62,8 +41,8 @@ export default {
     data() {
         return {
             options: {
-                type: 'loop',
-                rewind: true,
+                type: 'slide',
+                rewind: false,
                 perPage: 1,
                 autoplay: false,
                 pauseOnHover: false,
@@ -78,7 +57,14 @@ export default {
             avatarUrl: null,
             readStory: [],
             newStory: [],
+            story: [],
         };
+    },
+    methods: {
+        showStoryInfo: function(e) {
+            e.preventDefault();
+            console.log(e.target.id)
+        }
     },
     created() {
         var userSeq = localStorage.getItem('user-seq');
@@ -90,17 +76,22 @@ export default {
         httpStory.get(`/story/all/${userSeq}`).then((result) => {
             this.readStory = result.data.readStory;
             this.newStory = result.data.newStory;
-            // console.log(result.data)
-            // console.log(this.newStory)
-            // console.log(this.readStory)
-            // for(var i = 0; i < result.data.readStory.length; i++) {
-            //     this.story.push(result.data.readStory[i])
-            // }
-            // for(var j = 0; i < result.data.newStory.length; j++) {
-            //     this.story.push(result.data.newStory[j])
-            // }
-            // console.log(result.data)
-            // console.log(this.story)
+            var temp = []
+            for(var i = 0; i < this.readStory.length+this.newStory.length; i++) {
+                if(i%10==9) {
+                    this.story.push(temp);
+                    temp=[]
+                }
+                else {
+                    if(i < this.newStory.length) {
+                        temp.push(this.newStory[i])
+                    }
+                    else {
+                        temp.push(this.readStory[i])
+                    }
+                }
+            }
+            this.story.push(temp);
         }, (error) => {
             console.log(error);
         })
@@ -135,17 +126,18 @@ export default {
     margin: 0 auto;
     display: flex;
     justify-content: space-evenly;
-    margin-top: 2.25vh;
+    margin-top: 3vh;
     width: 90%;
     overflow: hidden;
 }
 
 .story-element-container {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
+    width: 65px;
+    height: 65px;
+    border-radius: 100%;
     border: 1px solid #6A6A6A;
     margin: 0 8px;
+    overflow: hidden;
 }
 
 .story-element {
@@ -155,10 +147,6 @@ export default {
     cursor: pointer;
 }
 
-.story-element-container:hover {
-    transform: scale(1.1);
-    transition: 0.5s;
-}
 
 .grass-container {
     width: 95%;
