@@ -59,6 +59,7 @@ export default {
             readStory: [],
             newStory: [],
             story: [],
+            masterSeq: this.$route.params.userSeq,
         };
     },
     methods: {
@@ -74,7 +75,8 @@ export default {
         }, (error) => {
             console.log(error);
         });
-        httpStory.get(`/story/all/${userSeq}`).then((result) => {
+        httpStory.get(`/story/all/${this.masterSeq}`).then((result) => {
+            console.log(result.data)
             this.readStory = result.data.readStory;
             this.newStory = result.data.newStory;
             var temp = []
