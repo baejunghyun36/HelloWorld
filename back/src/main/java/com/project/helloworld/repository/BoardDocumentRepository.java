@@ -1,6 +1,7 @@
 package com.project.helloworld.repository;
 
 
+import com.project.helloworld.domain.User;
 import com.project.helloworld.elkStack.domain.BoardDocument;
 import java.util.List;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;

@@ -1,6 +1,7 @@
 package com.project.helloworld.repository;
 
 import com.project.helloworld.domain.TodayVisit;
+import com.project.helloworld.domain.User;
 import com.project.helloworld.dto.VisitorResponseDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
