@@ -8,9 +8,12 @@
                     <splide :options="options" class="slider">
                         <splide-slide class="splide-slide" v-for="stories in this.story" :key="stories">
                             <div class="one-slide">
-                                <div class="story-element-container" v-for="oneStory in stories" :key="oneStory" @click="showStoryInfo" :id="`${oneStory.boardSeq}`">
+                                <div :class="`story-element-container isRead_${oneStory.isRead}`" v-for="oneStory in stories" :key="oneStory" @click="showStoryInfo" :id="`${oneStory.boardSeq}`">
                                     <img class="story-element" src="@/assets/KakaoTalk_20230116_110321475_05.jpg" alt="스토리" v-if="oneStory.imgUrl==''" :id="`${oneStory.boardSeq}`"/>
                                     <img class="story-element" :src="`${oneStory.imgUrl}`" alt="스토리" v-if="oneStory.imgUrl!=''" :id="`${oneStory.boardSeq}`"/>
+                                </div>
+                                <div class="story-element-container" v-for="i in (10-stories.length)" :key="i">
+                                    <img class="story-element" src="@/assets/KakaoTalk_20230116_110321475_05.jpg" alt="스토리" hidden/>
                                 </div>
                             </div>
                         </splide-slide>
@@ -138,9 +141,16 @@ export default {
     width: 65px;
     height: 65px;
     border-radius: 100%;
-    border: 1px solid #6A6A6A;
     margin: 0 8px;
     overflow: hidden;
+}
+
+.isRead_0 {
+    border: 1px solid #6A6A6A;
+}
+
+.isRead_1 {
+    border: 1px solid red;
 }
 
 .story-element {
@@ -209,4 +219,6 @@ export default {
     border: 1.5px solid #6A6A6A;
 
 }
+
+
 </style>
