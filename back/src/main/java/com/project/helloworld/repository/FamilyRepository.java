@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface FamilyRepository extends JpaRepository<Family,Long> {
@@ -17,5 +18,8 @@ public interface FamilyRepository extends JpaRepository<Family,Long> {
 
     @Query(value="select accept from family where user_seq= :fromSeq and family_user_seq= :toSeq", nativeQuery = true)
     public Integer findByUsersAccept(@Param(value="fromSeq") Long fromSeq, @Param(value="toSeq") Long toSeq);
+
+    @Query(value = "select*from family where family_user_seq=:userSeq",nativeQuery = true)
+    public List<Family> findFamiliesByUser(@Param(value="userSeq") Long userSeq);
 
 }
