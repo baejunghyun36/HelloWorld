@@ -18,16 +18,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CustomOAuth2Service extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
     private final EntityManager em;
-    @Value("${spring.mail.username}")
+    @Value("${spring.baseAvatar}")
     private String baseAvatar;
 
     // OAuth2UserRequest에 있는 accessToken으로 유저정보 가져오기
@@ -55,13 +57,15 @@ public class CustomOAuth2Service extends DefaultOAuth2UserService {
         User user;
         if(userOptional.isPresent()) {
             user = userOptional.get();
-            if(!user.getAuthProvider().equals(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()))) {
-                throw new OAuth2AuthenticationProcessingException("Looks like you're signed up with " +
-                        user.getAuthProvider() + " account. Please use your " + user.getAuthProvider() +
-                        " account to login.");
-            }
+            // 일반 회원가입한 유저도 소셜로그인 할 수 있게끔 할거라 주석처리
+//            if(!user.getAuthProvider().equals(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()))) {
+//                throw new OAuth2AuthenticationProcessingException("Looks like you're signed up with " +
+//                        user.getAuthProvider() + " account. Please use your " + user.getAuthProvider() +
+//                        " account to login.");
+//            }
+
             // 기존 유저라면 갱신
-            user = updateExistingUser(user, oAuth2UserInfo);
+//            user = updateExistingUser(user, oAuth2UserInfo);
         } else {
             // 새로운 유저라면 DB 등록
             user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
@@ -76,7 +80,7 @@ public class CustomOAuth2Service extends DefaultOAuth2UserService {
         user.setAuthProvider(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()));
         user.setProviderId(oAuth2UserInfo.getUserSeq());
         user.setEmail(oAuth2UserInfo.getEmail());
-        user.setName(oAuth2UserInfo.getName());
+        user.setNickname(oAuth2UserInfo.getName());
 
         // 기본 아바타 이미지 등록
         Avatar avatar = new Avatar();
@@ -90,7 +94,6 @@ public class CustomOAuth2Service extends DefaultOAuth2UserService {
     }
 
     private User updateExistingUser(User existingUser, OAuth2UserInfo oAuth2UserInfo) {
-        existingUser.setName(oAuth2UserInfo.getName());
         return userRepository.save(existingUser);
     }
 }
