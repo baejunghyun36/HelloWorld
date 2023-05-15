@@ -146,6 +146,7 @@ export default {
                 `/board/searchByKeyword?keyword=${this.searchKeyword}&page=0`
             ).then((response) => {
                 this.searchResult = response.data;
+                console.log(this.searchResult)
             },
                 (error) => {
                     console.log(error);

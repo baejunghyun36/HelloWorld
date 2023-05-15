@@ -6,9 +6,9 @@
                 <div class="select-story">
                     <!-- {{ this.story }} -->
                     <splide :options="options" class="slider">
-                        <splide-slide class="splide-slide" v-for="stories in this.story" :key="stories">
-                            <div class="one-slide">
-                                <div :class="`story-element-container isRead_${oneStory.isRead}`"
+                        <splide-slide class="splide-slide">
+                            <div class="one-slide" v-for="stories in this.story" :key="stories">
+                                <div :class="`story-element-container-${oneStory.storySeq} isRead_${oneStory.isRead} story-element-container`"
                                     v-for="oneStory in stories" :key="oneStory" @click="showStoryInfo"
                                     :id="`${oneStory.storySeq}`">
                                     <img class="story-element" src="@/assets/KakaoTalk_20230116_110321475_05.jpg" alt="스토리"
@@ -37,7 +37,8 @@
         </div>
     </div>
     <Teleport to="body">
-        <modal :show="showModal" @close="showModal = false" :title="`${this.title}`" :author="`${this.author}`" :imgUrl="`${this.imgUrl}`" :boardSeq="`${this.boardSeq}`" :authorSeq="`${this.authorSeq}`">
+        <modal :show="showModal" @close="showModal = false" :title="`${this.title}`" :author="`${this.author}`"
+            :imgUrl="`${this.imgUrl}`" :boardSeq="`${this.boardSeq}`" :authorSeq="`${this.authorSeq}`">
             <template #header>
                 <h3>custom header</h3>
             </template>
@@ -88,18 +89,25 @@ export default {
         showStoryInfo: async function (e) {
             e.preventDefault();
             // console.log(e.target.id)
+            console.log(`story-element-container-${e.target.id}`)
+            var temp = e.target.closest('div');
+            if (temp.classList.contains('isRead_0')) {
+                temp.classList.remove(`isRead_0`);
+                temp.classList.add(`isRead_1`);
+            }
+            console.log(document.getElementsByClassName(`story-element-container-${e.target.id}`));
             httpStory.get(`/story/${e.target.id}`).then((result) => {
                 console.log(result.data)
-                this.title=result.data.title;
-                this.author=result.data.nickname;
-                this.boardSeq=result.data.boardSeq.toString();
-                this.authorSeq=result.data.writerSeq.toString();
-                this.imgUrl=result.data.imgUrl;
-                this.showModal=true;
+                this.title = result.data.title;
+                this.author = result.data.nickname;
+                this.boardSeq = result.data.boardSeq.toString();
+                this.authorSeq = result.data.writerSeq.toString();
+                this.imgUrl = result.data.imgUrl;
+                this.showModal = true;
             }, (error) => {
                 console.log(error)
             })
-            
+
         }
     },
     created() {
@@ -110,9 +118,10 @@ export default {
             console.log(error);
         });
         httpStory.get(`/story/all/${this.masterSeq}`).then((result) => {
-            console.log(result.data)
             this.readStory = result.data.readStory;
             this.newStory = result.data.newStory;
+            console.log(this.newStory)
+            console.log(this.readStory)
             var temp = []
             for (var i = 0; i < this.readStory.length + this.newStory.length; i++) {
                 if (i % 10 == 9) {
@@ -124,11 +133,12 @@ export default {
                         temp.push(this.newStory[i])
                     }
                     else {
-                        temp.push(this.readStory[i])
+                        temp.push(this.readStory[i - this.newStory.length])
                     }
                 }
             }
             this.story.push(temp);
+            console.log(this.story)
         }, (error) => {
             console.log(error);
         })
@@ -250,4 +260,5 @@ export default {
     border-radius: 3px;
     border: 1.5px solid #6A6A6A;
 
-}</style>
+}
+</style>
