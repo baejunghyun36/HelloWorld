@@ -32,7 +32,10 @@
                 <FamilyComment />
             </div>
             <div class="room-container">
-                <img class="room" src="@/assets/image/MiniRoom.png" />
+                <img class="room" src="@/assets/image/room/room1.png" v-if="this.roomNum==1"/>
+                <img class="room" src="@/assets/image/room/room2.png" v-if="this.roomNum==2"/>
+                <img class="room" src="@/assets/image/room/room3.png" v-if="this.roomNum==3"/>
+                <img class="room" src="@/assets/image/room/room4.png" v-if="this.roomNum==4"/>
             </div>
         </div>
     </div>
@@ -77,12 +80,14 @@ export default {
             newStory: [],
             story: [],
             masterSeq: this.$route.params.userSeq,
+            userSeq: localStorage.getItem('user-seq'),
             showModal: false,
             title: null,
             author: null,
             authorSeq: null,
             boardSeq: null,
             imgUrl: null,
+            roomNum: 1,
         };
     },
     methods: {
@@ -114,10 +119,20 @@ export default {
         var userSeq = localStorage.getItem('user-seq');
         http.get(`/user/mainpage/${userSeq}`).then((result) => {
             this.avatraUrl = result.data.data.avatarUrl;
+            console.log(result.data.data)
+            if(result.data.data.likeCnt+result.data.data.understandCnt+result.data.data.helpfulCnt > 10 || result.data.data.today > 10) {
+                this.roomNum = 2;
+            }
+            else if (result.data.data.likeCnt+result.data.data.understandCnt+result.data.data.helpfulCnt > 100 || result.data.data.today > 100) {
+                this.roomNum = 3;
+            }
+            else if (result.data.data.likeCnt+result.data.data.understandCnt+result.data.data.helpfulCnt > 500 || result.data.data.today > 500) {
+                this.roomNum = 4;
+            }
         }, (error) => {
             console.log(error);
         });
-        httpStory.get(`/story/all/${this.masterSeq}`).then((result) => {
+        httpStory.get(`/story/all/${this.userSeq}`).then((result) => {
             this.readStory = result.data.readStory;
             this.newStory = result.data.newStory;
             console.log(this.newStory)
@@ -206,10 +221,11 @@ export default {
 .grass-container {
     width: 95%;
     height: 20%;
-    border: 1px solid #6A6A6A;
+    border: 1px solid #F6F6F6;
     border-radius: 5px;
     margin: 0 auto;
     margin-top: 5px;
+    background-color: #F7F7F7;
 }
 
 .grass {
