@@ -107,14 +107,6 @@ public class BoardController {
         System.out.println(file);
         return  ResponseEntity.ok().body(s3Uploader.uploadFiles(file,"article"));
     }
-    @PostMapping("/bbb")
-    public ResponseEntity<?> bbb(@RequestBody String bbb){
-        return ResponseEntity.ok().body(bbb);
-    }
-    // Category 실험
-//    @GetMapping("/aaa")
-//    public ResponseEntity<List<BoardCategoryCountResponse>> getCategoryByUser(@RequestParam Long userSeq ) throws Exception {
-//        return ResponseEntity.ok().body(boardService.getCategoryByUser(userSeq));
-//    }
+
 
 }
