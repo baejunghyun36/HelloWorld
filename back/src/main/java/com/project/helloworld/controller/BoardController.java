@@ -104,7 +104,6 @@ public class BoardController {
 
     @PostMapping("/upload")
     public ResponseEntity<?> uploadFile(@RequestBody MultipartFile file) throws IOException {
-        System.out.println(file);
         return  ResponseEntity.ok().body(s3Uploader.uploadFiles(file,"article"));
     }
 
