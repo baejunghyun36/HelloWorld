@@ -31,6 +31,7 @@ const createComment = () => {
     console.log(requestDto);
     axios.post(`${baseUrl}/board/comment`, requestDto, {headers})
     .then(response => {
+        console.log(response.data)
         content.value = '';
         axios.post(`https://k8a308.p.ssafy.io/notify/`, response.data, {headers});
         console.log(response.data);
