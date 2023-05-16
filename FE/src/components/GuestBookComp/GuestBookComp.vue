@@ -2,21 +2,20 @@
     <div id = "Wrapper">
         <UserTitleComp />
         <div id = guestBookWrapper>
-            <div id = "guestBook">
+                <perfect-scrollbar>
                 <GuestBookCreateComp v-if="showCreateComp" @addGuestBook="addGuestBook"/>
                 <div id = "guestBookList" v-for="guestBook in guestBooks" :key=guestBook?.guestBookSeq>
                     <div id="guestBookOne" v-if="showSecretGuestBook(guestBook?.guestBookUserSeq, guestBook?.secret)">
                         <div :class="{'guestBookHeader_secret' : guestBook?.secret , 'guestBookHeader' : guestBook?.secret === false}">
                             <p class="GBWrite">
-                                <span class="GBWriter">{{ guestBook?.guestBookUserNickname  }}</span>
+                                <span class="GBWriter" @click="goMainpage(guestBook?.guestBookUserSeq)">{{ guestBook?.guestBookUserNickname  }}</span>
                                 <img src="@/assets/icon/laptop.png" alt="laptop">
                                 <span class="GBCreatedDate">{{ formatDate(guestBook?.createdTime) }}</span>
                             </p>
                             <p class="GBEditor">
                                 <span v-if="showEditGuestBook(guestBook?.guestBookUserSeq)" class="secret" style="font-weight: bold; cursor: pointer;" @click="isSecretGuestBook(guestBook?.guestBookSeq, guestBook?.secret, guestBook?.content)">{{ !guestBook?.secret ? "비밀로 하기" : "공개로 하기" }}</span>
                                 <span v-if="showEditGuestBook(guestBook?.guestBookUserSeq)" style="padding: 0 0.5vw 0 0.5vw;" class="secret">|</span>
-                                <span v-if="showEditGuestBook(guestBook?.guestBookUserSeq)" class="modify" style="font-weight: bold; cursor: pointer;" @click="showEditArea(guestBook?.guestBookSeq)">수정</span>
-                                <span v-if="!showCreateComp || showEditGuestBook(guestBook?.guestBookUserSeq)" style="padding: 0 0.5vw 0 0.5vw;" class="modify">|</span>
+                                <span v-if="guestBook?.guestBookUserSeq == userSeq" class="modify" style="font-weight: bold; cursor: pointer;" @click="showEditArea(guestBook?.guestBookSeq)">수정</span>
                                 <span v-if="!showCreateComp" class="delete" style="font-weight: bold; cursor: pointer;" @click="deleteGuestBook(guestBook?.guestBookSeq)">삭제</span>
                             </p>
                         </div>
@@ -64,7 +63,7 @@
                 <img src="@/assets/noneGB.png" alt="" class="noneImg">
                 <div class="noneText">방명록○l 없습LI⊂ト!</div>                
             </div>
-            </div>
+        </perfect-scrollbar>
         </div>
     </div>
 </template>
@@ -76,6 +75,8 @@ import { ref, computed, watch, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 import InfiniteLoading from 'v3-infinite-loading';
+import { router } from '@/router';
+import {PerfectScrollbar} from 'vue3-perfect-scrollbar';
 
 const headers = {
     "Content-Type" : "application/json;charset=utf-8",
@@ -139,8 +140,6 @@ const getGuestBooks = () => {
         .get(`${baseURL}/guestbook?userSeq=${minihomeMaster.value}&start=${start.value}&size=${size.value}`, {headers})
         .then(response => {
             guestBooks.value =  guestBooks.value.concat(response.data);
-            console.log(size.value);
-            console.log(response.data.length);
             start.value += 1;
             if (response.data.length < 10) busy.value = true;
             else busy.value = false;
@@ -304,8 +303,13 @@ const removeGuestBookComment = (guestBookSeq) => {
         })
 }
 
+const goMainpage = (guestBookUserSeq) => {
+    router.push(`/mainpage/${guestBookUserSeq}`);
+}
+
 </script>
 
+<style src="vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css"/>
 <style scoped>
 
     #guestBookWrapper {
@@ -318,12 +322,11 @@ const removeGuestBookComment = (guestBookSeq) => {
         justify-content: center;
         align-items: center;
     }
-    #guestBook {
+    .ps {
         height : 65vh;
-        width : 90vw;
+        width : 90%;
         padding : 0 2vw 0 2vw;
         margin : 0 1vw 0 1vw;
-        overflow-y : scroll;
     }
     /* 방명록 하나 CSS */
     #guestBookOne {
