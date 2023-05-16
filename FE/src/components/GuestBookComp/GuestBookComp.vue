@@ -2,27 +2,25 @@
     <div id = "Wrapper">
         <UserTitleComp />
         <div id = guestBookWrapper>
-            <div id = "guestBook">
+                <perfect-scrollbar>
                 <GuestBookCreateComp v-if="showCreateComp" @addGuestBook="addGuestBook"/>
-                <!-- <div v-if="guestBooks.length !== 0"> -->
                 <div id = "guestBookList" v-for="guestBook in guestBooks" :key=guestBook?.guestBookSeq>
                     <div id="guestBookOne" v-if="showSecretGuestBook(guestBook?.guestBookUserSeq, guestBook?.secret)">
                         <div :class="{'guestBookHeader_secret' : guestBook?.secret , 'guestBookHeader' : guestBook?.secret === false}">
                             <p class="GBWrite">
-                                <span class="GBWriter">{{ guestBook?.guestBookUserNickname  }}</span>
+                                <span class="GBWriter" @click="goMainpage(guestBook?.guestBookUserSeq)">{{ guestBook?.guestBookUserNickname  }}</span>
                                 <img src="@/assets/icon/laptop.png" alt="laptop">
                                 <span class="GBCreatedDate">{{ formatDate(guestBook?.createdTime) }}</span>
                             </p>
                             <p class="GBEditor">
                                 <span v-if="showEditGuestBook(guestBook?.guestBookUserSeq)" class="secret" style="font-weight: bold; cursor: pointer;" @click="isSecretGuestBook(guestBook?.guestBookSeq, guestBook?.secret, guestBook?.content)">{{ !guestBook?.secret ? "비밀로 하기" : "공개로 하기" }}</span>
                                 <span v-if="showEditGuestBook(guestBook?.guestBookUserSeq)" style="padding: 0 0.5vw 0 0.5vw;" class="secret">|</span>
-                                <span v-if="showEditGuestBook(guestBook?.guestBookUserSeq)" class="modify" style="font-weight: bold; cursor: pointer;" @click="showEditArea(guestBook?.guestBookSeq)">수정</span>
-                                <span v-if="!showCreateComp || showEditGuestBook(guestBook?.guestBookUserSeq)" style="padding: 0 0.5vw 0 0.5vw;" class="modify">|</span>
+                                <span v-if="guestBook?.guestBookUserSeq == userSeq" class="modify" style="font-weight: bold; cursor: pointer;" @click="showEditArea(guestBook?.guestBookSeq)">수정</span>
                                 <span v-if="!showCreateComp" class="delete" style="font-weight: bold; cursor: pointer;" @click="deleteGuestBook(guestBook?.guestBookSeq)">삭제</span>
                             </p>
                         </div>
                         <div id="guestBookMain">
-                            <img src="@/assets/minimi_temp/minime_1.png" alt="" class="guestMinime">
+                            <img :src="guestBook?.guestAvatar" alt="" class="guestMinime">
                             <div class="guestBookContent">
                                 <p class="secret" v-if="guestBook.secret">
                                     <img src="@/assets/icon/lock.png" alt="" class="lock_icon">
@@ -41,7 +39,7 @@
                                 <div class="commentOne">
                                     <p style="color : #4689aa; font-weight : bold;">{{ guestBook?.commentDto.nickname }}</p>
                                     <p style="padding : 0 1rem;">{{ guestBook?.commentDto.content }}</p>
-                                    <button class="commentDelete" @click="removeGuestBookComment(guestBook?.guestBookSeq,guestBook?.commentDto.guestBookCommentSeq)">삭제</button>
+                                    <button v-if="guestBook?.commentDto.userSeq === userSeq" class="commentDelete" @click="removeGuestBookComment(guestBook?.guestBookSeq,guestBook?.commentDto.guestBookCommentSeq)">삭제</button>
                                 </div>
                             </div>
                             <div id = "guestBookComment"> 
@@ -61,12 +59,11 @@
                         </div>
                     </template>
                 </InfiniteLoading>
-            <!-- </div> -->
             <div v-if="guestBooks.length === 0" class="nonegb">
                 <img src="@/assets/noneGB.png" alt="" class="noneImg">
                 <div class="noneText">방명록○l 없습LI⊂ト!</div>                
             </div>
-            </div>
+        </perfect-scrollbar>
         </div>
     </div>
 </template>
@@ -74,10 +71,12 @@
 <script setup>
 import GuestBookCreateComp from '@/components/GuestBookComp/GuestBookCreateComp.vue';
 import UserTitleComp from "../BasicComp/UserTitleComp.vue";
-import { ref, computed, watch, onBeforeMount } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 import InfiniteLoading from 'v3-infinite-loading';
+import { router } from '@/router';
+import {PerfectScrollbar} from 'vue3-perfect-scrollbar';
 
 const headers = {
     "Content-Type" : "application/json;charset=utf-8",
@@ -134,10 +133,16 @@ watch(showEditArea, (newValue) => {
 
 
 const getGuestBooks = () => {
+    busy.value = true;
+    start.value = 0;
+    guestBooks.value = [];
     axios
         .get(`${baseURL}/guestbook?userSeq=${minihomeMaster.value}&start=${start.value}&size=${size.value}`, {headers})
         .then(response => {
-            guestBooks.value = response.data;
+            guestBooks.value =  guestBooks.value.concat(response.data);
+            start.value += 1;
+            if (response.data.length < 10) busy.value = true;
+            else busy.value = false;
         })
         .catch(error => {
             console.error(error);
@@ -147,14 +152,17 @@ const getGuestBooks = () => {
 
 const loadMore = () => {
     if (busy.value) return;
-
     busy.value = true;
     axios
     .get(`${baseURL}/guestbook?userSeq=${minihomeMaster.value}&start=${start.value}&size=${size.value}`, {headers})
     .then(response => {
-      guestBooks.value = guestBooks.value.concat(response.data);  // 기존 데이터에 새로운 데이터 추가
-      busy.value = false;  // 데이터 로딩 상태 해제
-      start.value += 1;  // 다음 데이터를 가져오기 위해 start 값 증가
+        if (response.data.length > 0 ) {
+            guestBooks.value = guestBooks.value.concat(response.data);  // 기존 데이터에 새로운 데이터 추가
+                 // 데이터 로딩 상태 해제
+                start.value += 1;
+                if (response.data.length < 10) busy.value = true;
+                else busy.value = false;
+          }  // 다음 데이터를 가져오기 위해 start 값 증가
     })
     .catch(error => {
       console.error(error);
@@ -164,16 +172,21 @@ const loadMore = () => {
 
 const addGuestBook = () => {
     start.value = 0;
-    guestBooks.value = ref([]);
+    busy.value = true;
+    guestBooks.value= [];
     axios
         .get(`${baseURL}/guestbook?userSeq=${minihomeMaster.value}&start=${start.value}&size=${size.value}`,{headers})
         .then(response => {
-            guestBooks.value = response.data;
-        })
-        .catch(error => {
-            console.error(error);
-            alert("다시 렌더링할 때, 에러 발생");
-        })
+                guestBooks.value = guestBooks.value.concat(response.data);  // 기존 데이터에 새로운 데이터 추가
+                 // 데이터 로딩 상태 해제
+                start.value += 1;
+                if (response.data.length < 10) busy.value = true;
+                else busy.value = false;
+            })
+            .catch(error => {
+                console.error(error);
+                alert("다시 렌더링할 때, 에러 발생");
+            })
 }
 
 const isSecretGuestBook = (guestBookSeq, secret, content) => {
@@ -225,30 +238,22 @@ const updateGuestBook = (updateContentValue, guestBookSeq, secret) => {
     })
 }
 
-// onMounted(() => {
-//     start.value = 0;
-//     guestBooks.value = [];
-//     getGuestBooks();
-// });
-
-onBeforeMount(() => {
+onMounted(() => {
+    busy.value = false;
     start.value = 0;
     guestBooks.value = [];
     getGuestBooks();
-})
+});
 
-// created(() => {
-//     start.value = 0;
-//     guestBooks.value = [];
-//     getGuestBooks();
-// })
 
 const deleteGuestBook = (guestBookSeq) => {
     axios
         .delete(`${baseURL}/guestbook/${guestBookSeq}`,{headers})
         .then(response => {
             console.log(response.data);
+            busy.value = false;
             start.value = 0;
+            guestBooks.value = [];
             getGuestBooks();
             alert("방명록이 삭제되었습니다!");
         })
@@ -298,8 +303,13 @@ const removeGuestBookComment = (guestBookSeq) => {
         })
 }
 
+const goMainpage = (guestBookUserSeq) => {
+    router.push(`/mainpage/${guestBookUserSeq}`);
+}
+
 </script>
 
+<style src="vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css"/>
 <style scoped>
 
     #guestBookWrapper {
@@ -312,12 +322,11 @@ const removeGuestBookComment = (guestBookSeq) => {
         justify-content: center;
         align-items: center;
     }
-    #guestBook {
+    .ps {
         height : 65vh;
-        width : 90vw;
+        width : 90%;
         padding : 0 2vw 0 2vw;
         margin : 0 1vw 0 1vw;
-        overflow-y : scroll;
     }
     /* 방명록 하나 CSS */
     #guestBookOne {

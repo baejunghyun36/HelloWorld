@@ -2,7 +2,7 @@
     <div id="boardDetail">
         <UserTitleComp />
         <div id="Wrapper">
-            <div id = "boardWrapper">
+            <perfect-scrollbar>
                 <div id = "boardTitle">{{ board?.title }}</div>
                 <div id = "boardInfo">
                     <p id="author">{{ board?.writer }}</p>
@@ -11,7 +11,7 @@
                 <div v-html="changeMarkdown" class="content"></div>
                 <div class="boardFooter">
                     <div class="checkSticker" v-if="board && board.sticker">
-                        <div class="sticker">
+                        <div class="sticker" v-if="board.userSeq !== userSeq">
                             <img src="@/assets/boardIcon/heart.png" alt="heart" v-if="board.sticker[0] === true" @click="toggleSticker(0)">
                             <img src="@/assets/boardIcon/heart_no.png" alt="heart_no" v-else @click="toggleSticker(0)">
                             <img src="@/assets/boardIcon/help.png" alt="plus" v-if="board.sticker[1] === true" @click="toggleSticker(1)">
@@ -35,7 +35,7 @@
                     <CommentListComp :comments="board.comments"/>
                     <CommentCreateComp @addBoardComment="addBoardComment"/>
                 </div>
-            </div>
+        </perfect-scrollbar>
         </div>
     </div>
 </template>
@@ -50,6 +50,7 @@ import axios from 'axios';
 import { marked } from 'marked';
 import { useRoute } from 'vue-router';
 import { router } from '@/router';
+import {PerfectScrollbar} from 'vue3-perfect-scrollbar';
 
 const content = ref(``);
 const board = ref({});
@@ -176,6 +177,7 @@ const shareBoard = (boardSeq) => {
 
 </script>
 
+<style src="vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css"/>
 <style scoped>
     #boardDetail {
         overflow: hidden!important;
@@ -191,12 +193,9 @@ const shareBoard = (boardSeq) => {
         justify-content: center;
         align-items: center;
     }
-    #boardWrapper {
-        height: 85%;
+    .ps {
+        height : 85%;
         width : 87%;
-        overflow : scroll;
-        overflow-x: hidden;
-        /* overflow: hidden; */
         padding : 0 2% 0 2%;
     }
     #boardTitle {

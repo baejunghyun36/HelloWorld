@@ -1,20 +1,21 @@
 <template>
     <div id="guestBookCreate" v-if="showCreateComp">
         <div id="GBCreate">
-            <img src="@/assets/minimi_temp/minime_me.png" alt="temp_minime">
+            <img :src="userInfo?.avatarUrl" alt="temp_minime">
             <textarea name="guestBookContent" id="GBContent" cols="80" rows="7" placeholder="방명록을 작성하세요" v-model="newGuestBookContent"></textarea>
         </div>
         <div id="GBUser">
-            <router-link to="" class="minime-link">미니미</router-link>
+            <router-link to="" class="minime-link">{{ userInfo?.nickname }}</router-link>
             <button id="GBCheck" @click="addGuestBook">확인</button>
         </div>       
     </div>
 </template>
 
 <script setup>
+import http from '@/api/httpWithAccessToken';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
-import { ref, getCurrentInstance, computed } from 'vue';
+import { ref, getCurrentInstance, computed, onBeforeMount } from 'vue';
 
 const emit = getCurrentInstance().emit;
 const newGuestBookContent = ref('');
@@ -26,10 +27,19 @@ const headers = {
 const route = useRoute();
 const minihomeMaster = computed(() => route.params.userSeq);
 const userSeq = ref(`${localStorage.getItem("user-seq")}`);
-
+const userInfo = ref({});
 const showCreateComp = computed(() => {
     return minihomeMaster.value !== userSeq.value;
 })
+
+const getUserInfo = () => {
+    http.get(`/user/userInfo/${userSeq.value}`)
+    .then((response) => {
+        userInfo.value = response.data.data;
+    }, (error) => {
+        console.log(error);
+       })
+}
 
 const addGuestBook = () => {
     const requestDto = {
@@ -41,7 +51,14 @@ const addGuestBook = () => {
     newGuestBookContent.value = '';
     axios.post(`${baseURL}/guestbook`, requestDto, {headers})
         .then(response => {
-            console.log(response.data);
+            const notifyDto = {
+                "type" : 1,
+                "typeSeq" : response.data.responseSeq,
+                "title" : `"[방명록] ${userInfo.value.nickname}님이 방명록을 남겼습니다"`,
+                "content" : "방명록방명록",
+                "receiveUserSeq" : minihomeMaster.value
+            }
+            axios.post("https://k8a308.p.ssafy.io/notify/", notifyDto, {headers});
             emit('addGuestBook');
         })
         .catch(error => {
@@ -49,6 +66,11 @@ const addGuestBook = () => {
             alert('방명록 작성에 실패했습니다!');
         })
 }
+
+onBeforeMount(() => {
+    getUserInfo();
+});
+
 </script>
 
 <style scoped>
@@ -76,7 +98,7 @@ const addGuestBook = () => {
     }
     #GBUser {
         display: flex;
-        margin : 1vh 2.5vw 1.2vh 3.7vw;
+        margin : 1vh 2vw 1.2vh 3.3vw;
         justify-content: space-between;
         font-size : 1vw;
     }
