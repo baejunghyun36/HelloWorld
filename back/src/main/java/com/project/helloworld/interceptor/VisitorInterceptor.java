@@ -34,11 +34,11 @@ public class VisitorInterceptor implements HandlerInterceptor {
 
         if(methodName.equals("getBoard")){ // board로 접속할 때 userSeq 추출
             ownerSeq = request.getParameter("userSeq");
-        }else{  // mainpage로 접속할 때 userSeq 추출
+        }else if(methodName.equals("getUserMainInfo")){  // mainpage로 접속할 때 userSeq 추출
             String path = request.getRequestURI();
             String[] pathSplit = path.split("/");
             ownerSeq = pathSplit[3]; // 홈페이지 주인 seq
-        }
+        }else return true; // 다른 경로에 대해서는 적용 안되게끔
 
         String token = jwtAuthenticationFilter.parseBearerToken(request);
         Long visitorSeq = jwtTokenProvider.getUserSeq(token); // 방문자 seq
