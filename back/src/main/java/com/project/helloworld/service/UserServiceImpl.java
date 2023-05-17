@@ -417,6 +417,7 @@ public class UserServiceImpl implements UserService{
             userSearchLists.add(searchInfo);
         }
 
+
         return response.success(userSearchLists, message, HttpStatus.OK);
     }
 
