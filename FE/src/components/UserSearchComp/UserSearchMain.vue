@@ -5,10 +5,10 @@
             <div class="community-notice">
                 <div class="search-container">
                     <form class="search-form">
-                        <select>
+                        <select v-model="type" @change="selectType">
                             <option value="">검색 조건&nbsp;&nbsp;▼</option>
-                            <option value="1">닉네임</option>
-                            <option value="2">이름</option>
+                            <option value="1">이름</option>
+                            <option value="2">닉네임</option>
                             <option value="3">이메일</option>
                         </select>
                         <input type="search-input" class="search-input" name="search" required v-model="searchKeyword">
@@ -21,13 +21,13 @@
                         <div class="article-container" v-for="info in oneRow" :key="info" :id="`${info.userSeq}`"
                             @click="mvFamilyHome">
                             <div class="represent-img-container" :id="`${info.userSeq}`">
-                                <img class="represent-img" :src="`${info.imageUrl}`" alt="대표이미지" :id="`${info.userSeq}`" />
+                                <img class="represent-img" :src="`${info.avatarUrl}`" alt="대표이미지" :id="`${info.userSeq}`" />
                             </div>
                             <div class="title" :id="`${info.userSeq}`">
                                 {{ info.nickname }}
                             </div>
                             <div class="author" :id="`${info.userSeq}`">
-                                {{ info.relationName }}
+                                {{ info.name }}
                             </div>
                         </div>
                         <div class="article-container hidden" v-for="i in 4 - oneRow.length" :key="i"
@@ -40,47 +40,43 @@
 
 <script>
 import UserTitleComp from "@/components/BasicComp/UserTitleComp.vue"
+import http from "@/api/httpWithAccessToken"
 export default {
     components: { UserTitleComp, },
     methods: {
         chunk: function (data = [], size = 1) {
             const arr = [];
-
             for (let i = 0; i < data.length; i += size) {
                 arr.push(data.slice(i, i + size));
             }
-
             return arr;
         },
         mvFamilyHome: function (e) {
             e.preventDefault();
             this.$router.push({ name: 'mainpage', params: { userSeq: e.target.id } })
+        },
+        selectType: function(e) {
+            e.preventDefault();
+            console.log(e.target.value)
+            console.log(`value: ${this.type}`)
+        },
+        search: function() {
+            if(this.type=='') {
+                alert("검색 조건을 먼저 선택해주세요")
+            }
+            var info = {
+                "keyword": this.searchKeyword,
+                "masterSeq": this.masterSeq,
+                "type": this.type
+            }
+            http.post(`/user/search`, JSON.stringify(info)).then((result) => {
+                console.log(result.data.data)
+                this.searchResult = result.data.data;
+                this.chunkedResult = this.chunk(this.searchResult, 4)
+            }, (error) => {
+                console.log(error);
+            })
         }
-    },
-    async mounted() {
-        // await http.get(`/family?userSeq=${this.masterSeq}&status=all&hasComment=true`).then((result) => {
-        //     // console.log(result.data.body)
-        //     this.family=result.data.body;
-        // }, (error) => {
-        //     console.log(error)
-        // });
-        // await http.get(`/family?userSeq=${this.masterSeq}&status=all&hasComment=false`).then((result) => {
-        //     // var temp = result.data.body;
-        //     this.family.concat(result.data.body);
-        //     // this.chunkedResult = this.chunk(this.family, 4);
-        // }, (error) => {
-        //     console.log(error)
-        // });
-        // console.log(this.family)
-        // for(var i = 0; i < this.family.length; i++) {
-        //     await http.get(`/user/userInfo/${this.family[i].userSeq}`).then((result) => {
-        //         this.family[i]['imageUrl'] = result.data.data.avatarUrl;
-        //         this.family[i]['nickname'] = result.data.data.nickname;
-        //     }, (error) => {
-        //         console.log(error)
-        //     })
-        // }
-        this.chunkedResult = this.chunk(this.searchResult, 4);
     },
     data() {
         return {
@@ -88,6 +84,8 @@ export default {
             userSeq: localStorage.getItem('user-seq'),
             searchResult: [],
             chunkedResult: null,
+            type: "",
+            searchKeyword: "",
         }
     },
 }
@@ -270,22 +268,22 @@ select::-ms-expand {
     width: 90%;
     margin: 0 auto;
     margin-top: 5%;
-    text-align: start;
     font-size: 13px;
     font-weight: 700;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    text-align: center;
 }
 
 .author {
     font-size: 9px;
     width: 90%;
     margin: 0 auto;
-    text-align: start;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     margin-top: 1%;
+    text-align: center;
 }
 </style>
