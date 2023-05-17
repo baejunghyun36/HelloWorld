@@ -11,6 +11,9 @@ export default {
             myNickname: null,
             otherNickname: null,
             userAvatar: null,
+            fromRelationName: null,
+            toRelationName: null,
+            requestMsg: null
         }
     },
     created() {
@@ -25,6 +28,14 @@ export default {
         }, (error)=>{
             console.log(error);
         });
+        http.get(`/family/one?fromUserSeq=${this.masterSeq}&toUserSeq=${this.userSeq}`).then((result) => {
+            console.log(result.data.body);
+            this.fromRelationName = result.data.body.fromRelationName;
+            this.toRelationName = result.data.body.toRelationName;
+            this.requestMsg = result.data.body.requestMessage;
+        }, (error) => {
+            console.log(error);
+        })
     },
     methods: {
         acceptFamily: function() {
@@ -58,7 +69,7 @@ export default {
                         <div class="user-name">{{this.myNickname}} (나)</div>
                         <div class="request-msg">&nbsp;님을&nbsp;</div>
                         <div class="user-name">{{ this.otherNickname }}</div>
-                        <div class="request-msg">&nbsp;님의 최씨 로,</div>
+                        <div class="request-msg">&nbsp;님의 {{this.toRelationName}} 로,</div>
                         <!-- <input class="family-name-input" placeholder="일촌명" />
                         <div class="request-msg">&nbsp;로,</div> -->
                     </div>
@@ -66,7 +77,7 @@ export default {
                         <div class="user-name">{{this.otherNickname}}</div>
                         <div class="request-msg">&nbsp;님을&nbsp;</div>
                         <div class="user-name">{{this.myNickname}} (나)</div>
-                        <div class="request-msg">&nbsp;님의 김씨 로,</div>
+                        <div class="request-msg">&nbsp;님의 {{this.fromRelationName}} 로,</div>
                         <!-- <input class="family-name-input" placeholder="일촌명" />
                         <div class="request-msg">&nbsp;로,</div> -->
                     </div>
@@ -74,7 +85,7 @@ export default {
                         <div class="request-msg">위와 같은 일촌명으로 일촌 요청이 도착했습니다</div>
                     </div>
                     <div class="request-msg-container">
-                        <textarea class="request-msg-input" value="나랑 일촌하자!!" disabled></textarea>
+                        <textarea class="request-msg-input" :value="`${this.requestMsg}`" disabled></textarea>
                     </div>
                     <div class="notice-msg">
                         수락하면 일촌이 맺어집니다
