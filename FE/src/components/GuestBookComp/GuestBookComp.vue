@@ -39,10 +39,10 @@
                                 <div class="commentOne">
                                     <p style="color : #4689aa; font-weight : bold;">{{ guestBook?.commentDto.nickname }}</p>
                                     <p style="padding : 0 1rem;">{{ guestBook?.commentDto.content }}</p>
-                                    <button v-if="guestBook?.commentDto.userSeq === userSeq" class="commentDelete" @click="removeGuestBookComment(guestBook?.guestBookSeq,guestBook?.commentDto.guestBookCommentSeq)">삭제</button>
+                                    <button v-if="guestBook?.commentDto.userSeq == userSeq" class="commentDelete" @click="removeGuestBookComment(guestBook?.guestBookSeq,guestBook?.commentDto.guestBookCommentSeq)">삭제</button>
                                 </div>
                             </div>
-                            <div id = "guestBookComment"> 
+                            <div id = "guestBookComment" v-if="minihomeMaster === userSeq"> 
                                 <input type="text" class="comment" v-model="newComment[guestBook?.guestBookSeq]">
                                 <button class="commentCreate" @click="addGuestBookComment(newComment[guestBook?.guestBookSeq], guestBook?.guestBookSeq)">확인</button>
                             </div>
@@ -274,14 +274,7 @@ const addGuestBookComment = (newCommentValue, guestBookSeq) => {
         .post(`${baseURL}/guestbook/comment/${guestBookSeq}`, requestDto, {headers})
         .then(response => {
             console.log(response.data);
-            axios.get(`${baseURL}/guestbook?userSeq=${minihomeMaster.value}&start=${start.value}&size=${size.value}`,{headers})
-            .then(response => {
-                guestBooks.value = response.data;
-            })
-            .catch(error => {
-                console.error(error);
-                alert("댓글을 불러올 수 없습니다!");
-            })
+            getGuestBooks();
         })
         .catch(error => {
             console.error(error);
@@ -431,6 +424,7 @@ const goMainpage = (guestBookUserSeq) => {
         flex-direction: column;
         background-color: #F0F0F0;
         margin : 0 0.5rem;
+        padding : 1rem;
     }
 
     .guestBookCommentList_secret {
@@ -438,13 +432,13 @@ const goMainpage = (guestBookUserSeq) => {
         flex-direction: column;
         background-color: #FFEFD3;
         margin: 0 0.5rem;
+        padding : 1rem;
     }
 
     #guestBookCommentWrapper {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        padding-top : 1rem;
         margin : 0 1vw;
         padding-left : 3vw;
         font-size : 0.8rem;
@@ -453,7 +447,6 @@ const goMainpage = (guestBookUserSeq) => {
         display: flex;
         flex-direction: row;
         justify-content: space-around;
-        padding : 1rem;
         margin : 0 1rem;
     }
     .comment {
