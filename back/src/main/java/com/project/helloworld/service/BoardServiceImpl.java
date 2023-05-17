@@ -13,6 +13,7 @@ import com.project.helloworld.repository.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -69,12 +70,12 @@ public class BoardServiceImpl implements BoardService{
                 .user(user).build();
         Board newBoardSaved = boardRepository.save(board);
         String content = newBoardSaved.getContent();
-        int endIndex = Math.min(content.length(), 30);
 
         BoardDocument boardDocument = BoardDocument.builder()
             .id(newBoardSaved.getBoardSeq().toString())
             .title(newBoardSaved.getTitle())
-            //.content(content.substring(0, endIndex))
+            .nickname(newBoardSaved.getUser().getNickname())
+            .userSeq(newBoardSaved.getUser().getUserSeq())
             .content(newBoardSaved.getContent())
             .imageUrl(newBoardSaved.getImgUrl())
             .likeCnt(newBoardSaved.getLikeCnt())
@@ -89,7 +90,7 @@ public class BoardServiceImpl implements BoardService{
         grassRepository.save(grass);
         MessageResponse messageResponse = MessageResponse.builder().type(-1).typeSeq(newBoardSaved.getBoardSeq())
                 .title(newBoardSaved.getUser().getName()+"님이 게시글을 작성하였습니다.")
-                .content("게시글게시글").receiveUserSeq(newBoardSaved.getUser().getUserSeq()).build();
+                .content("게시글").receiveUserSeq(newBoardSaved.getUser().getUserSeq()).build();
         storyService.sendStory(newBoardSaved, user.getFamilies().stream().map(x->x.getFamilyUser().getUserSeq()).collect(Collectors.toList()));
         return messageResponse;
     }
@@ -172,6 +173,25 @@ public class BoardServiceImpl implements BoardService{
                 .imgUrl(board.getImgUrl()).likeCnt(board.getLikeCnt()).helpfulCnt(board.getHelpfulCnt())
                 .understandCnt(board.getUnderstandCnt()).user(board.getUser()).build();
         Board newBoardSaved = boardRepository.save(newBoard);
+
+        // Elasticsearch에서 boardSeq를 가지고 있는 BoardDocument 찾기
+        Optional<BoardDocument> boardDocumentOptional = boardDocumentRepository.findById(board.getBoardSeq());
+
+        // BoardDocument가 존재하면 업데이트
+        if (boardDocumentOptional.isPresent()) {
+            BoardDocument boardDocument = boardDocumentOptional.get();
+
+            // 전달받은 내용과 제목으로 BoardDocument 수정
+            boardDocument.setTitle(boardModifyBody.getTitle());
+            boardDocument.setContent(boardModifyBody.getContent());
+
+            // 수정된 BoardDocument 저장
+            boardDocumentRepository.save(boardDocument);
+        }
+
+
+
+
         MessageResponse messageResponse = MessageResponse.builder().type(-1).typeSeq(newBoardSaved.getBoardSeq())
                 .title(newBoardSaved.getUser().getName()+"님이 게시글을 수정했습니다.")
                 .content("게시글 수정").build();
@@ -183,6 +203,18 @@ public class BoardServiceImpl implements BoardService{
         Board board = boardRepository.findById(boardSeq).orElseThrow(() -> new Exception("not exist board : "+boardSeq));
         log.info(board.toString());
         boardRepository.delete(board);
+
+        // Elasticsearch에서 게시글 찾기
+        Optional<BoardDocument> boardDocumentOptional = boardDocumentRepository.findById(boardSeq);
+
+        // BoardDocument가 존재하면 삭제
+        if (boardDocumentOptional.isPresent()) {
+            BoardDocument boardDocument = boardDocumentOptional.get();
+            boardDocumentRepository.delete(boardDocument);
+        }
+
+
+
         MessageResponse messageResponse = MessageResponse.builder().type(-1).title("게시글이 삭제되었습니다.").build();
         return messageResponse;
     }
@@ -204,6 +236,19 @@ public class BoardServiceImpl implements BoardService{
                 .grasses(board.getGrasses()).stickers(board.getStickers())
                 .bookMarks(board.getBookMarks()).build();
         boardRepository.save(newBoard);
+
+        // Elasticsearch에서 boardSeq를 가지고 있는 BoardDocument 찾기
+        Optional<BoardDocument> boardDocumentOptional = boardDocumentRepository.findById(board.getBoardSeq());
+
+        // BoardDocument가 존재하면 업데이트
+        if (boardDocumentOptional.isPresent()) {
+            BoardDocument boardDocument = boardDocumentOptional.get();
+
+            // 전달받은 내용과 제목으로 BoardDocument 수정
+            boardDocument.setCommentCnt(board.getCommentCnt());
+            // 수정된 BoardDocument 저장
+            boardDocumentRepository.save(boardDocument);
+        }
 
         MessageResponse messageResponse = MessageResponse.builder().type(2).typeSeq(newBoard.getBoardSeq())
                 .title(newCommentSaved.getUser().getName()+"님이 댓글을 등록하였습니다.").content("댓글댓글댓글")
@@ -240,6 +285,21 @@ public class BoardServiceImpl implements BoardService{
                 .grasses(board.getGrasses()).stickers(board.getStickers())
                 .bookMarks(board.getBookMarks()).build();
         boardRepository.save(newBoard);
+
+        // Elasticsearch에서 boardSeq를 가지고 있는 BoardDocument 찾기
+        Optional<BoardDocument> boardDocumentOptional = boardDocumentRepository.findById(board.getBoardSeq());
+
+        // BoardDocument가 존재하면 업데이트
+        if (boardDocumentOptional.isPresent()) {
+            BoardDocument boardDocument = boardDocumentOptional.get();
+
+            // 전달받은 내용과 제목으로 BoardDocument 수정
+            boardDocument.setCommentCnt(board.getCommentCnt());
+            // 수정된 BoardDocument 저장
+            boardDocumentRepository.save(boardDocument);
+        }
+
+
         MessageResponse messageResponse = MessageResponse.builder().type(-1).title("댓글 삭제 되었습니다.").build();
         return messageResponse;
     }
@@ -292,6 +352,21 @@ public class BoardServiceImpl implements BoardService{
                 break;
 
         }
+
+        // Elasticsearch에서 boardSeq를 가지고 있는 BoardDocument 찾기
+        Optional<BoardDocument> boardDocumentOptional = boardDocumentRepository.findById(board.getBoardSeq());
+
+        // BoardDocument가 존재하면 업데이트
+        if (boardDocumentOptional.isPresent()) {
+            BoardDocument boardDocument = boardDocumentOptional.get();
+
+            // 전달받은 내용과 제목으로 BoardDocument 수정
+            boardDocument.setLikeCnt(board.getHelpfulCnt()+board.getLikeCnt()+board.getUnderstandCnt());
+            // 수정된 BoardDocument 저장
+            boardDocumentRepository.save(boardDocument);
+        }
+
+
         MessageResponse messageResponse = MessageResponse.builder().type(5).typeSeq(newStickerSaved.getStickerSeq())
                 .title(newStickerSaved.getUser().getName()+"님이 반응을 했습니다.").content("좋아요")
                 .receiveUserSeq(newStickerSaved.getUser().getUserSeq())
@@ -345,6 +420,19 @@ public class BoardServiceImpl implements BoardService{
             default:
                 break;
         }
+        // Elasticsearch에서 boardSeq를 가지고 있는 BoardDocument 찾기
+        Optional<BoardDocument> boardDocumentOptional = boardDocumentRepository.findById(board.getBoardSeq());
+
+        // BoardDocument가 존재하면 업데이트
+        if (boardDocumentOptional.isPresent()) {
+            BoardDocument boardDocument = boardDocumentOptional.get();
+
+            // 전달받은 내용과 제목으로 BoardDocument 수정
+            boardDocument.setLikeCnt(board.getHelpfulCnt()+board.getLikeCnt()+board.getUnderstandCnt());
+            // 수정된 BoardDocument 저장
+            boardDocumentRepository.save(boardDocument);
+        }
+
         MessageResponse messageResponse = MessageResponse.builder().type(-1).content("반응이 삭제되었습니다.").build();
         return messageResponse;
     }
