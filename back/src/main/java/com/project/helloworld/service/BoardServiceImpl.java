@@ -73,8 +73,8 @@ public class BoardServiceImpl implements BoardService{
         Board board = Board.builder()
                 .title(boardCreateBody.getTitle())
                 .content(boardCreateBody.getContent())
-                .categorySeq(boardCreateBody.getCategorySeq()).
-                imgUrl(boardCreateBody.getImgUrl())
+                .categorySeq(boardCreateBody.getCategorySeq())
+                .imgUrl(boardCreateBody.getImgUrl())
                 .likeCnt(0)
                 .helpfulCnt(0)
                 .commentCnt(0)
