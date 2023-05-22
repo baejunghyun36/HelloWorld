@@ -149,7 +149,7 @@ HelloWorld는 Github와 SNS 각각의 장점을 가져온 개발자 커뮤니티
 
 ### 🎨시스템 아키텍처
 
-![image](https://github.com/mjseok/SSAFY_CS_Study/assets/44194990/c6afb8f1-8173-451a-b73c-350e08a94149)
+<img src="./img/sysemarchitecture.png" width="700">
 
 ### 💾프로젝트 파일 구조
 
@@ -339,7 +339,7 @@ FE
 
 ### 게시글 작성
 
-<img src="./img/게시글 작성.gif" width="700">
+<img src="./img/boardCreate.gif" width="700">
 
 - 마크다운 형식으로 게시글 작성 가능
 
