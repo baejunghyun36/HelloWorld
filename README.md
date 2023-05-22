@@ -149,7 +149,7 @@ HelloWorld는 Github와 SNS 각각의 장점을 가져온 개발자 커뮤니티
 
 ### 🎨시스템 아키텍처
 
-<img src="./img/HelloWorld%20시스템%20아키텍처.png">
+<img src="./img/HelloWorld 시스템 아키텍처.png">
 
 ### 💾프로젝트 파일 구조
 
