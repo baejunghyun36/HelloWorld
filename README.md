@@ -315,7 +315,8 @@ FE
 
 ### 메인 세부 - 파도타기
 
-<img src="./img/surffing.gif" width="700">
+<img src="./img/surffing.gif" width="600">
+
 - 랜덤으로 추천되는 사용자의 페이지로 이동 가능
 
 ### 메인 세부 - 잔디
