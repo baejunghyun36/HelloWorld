@@ -149,7 +149,7 @@ HelloWorld는 Github와 SNS 각각의 장점을 가져온 개발자 커뮤니티
 
 ### 🎨시스템 아키텍처
 
-<img src="./img/HelloWorld 시스템 아키텍처.png">
+![image](https://github.com/mjseok/SSAFY_CS_Study/assets/44194990/c6afb8f1-8173-451a-b73c-350e08a94149)
 
 ### 💾프로젝트 파일 구조
 
@@ -266,7 +266,7 @@ FE
 
 ### 로그인 이전
 
-<img src="./img/로그인 이전.png" width="700">
+![로그인 이전](https://github.com/mjseok/SSAFY_CS_Study/assets/44194990/2916e5c8-39b9-4af4-b244-5842ec92f60f)
 
 - 일반 로그인, github로그인, 회원가입 등을 선택할 수 있는 화면
 
