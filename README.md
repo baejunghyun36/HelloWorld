@@ -266,74 +266,74 @@ FE
 
 ### 로그인 이전
 
-![로그인 이전](https://github.com/mjseok/SSAFY_CS_Study/assets/44194990/2916e5c8-39b9-4af4-b244-5842ec92f60f)
+<img src="./img/before_login.png" width="700">
 
 - 일반 로그인, github로그인, 회원가입 등을 선택할 수 있는 화면
 
 ### 회원가입 및 아바타 생성
 
-<img src="./img/회원가입.gif" width="700">
+<img src="./img/sign_up.gif" width="700">
 
 - 회원가입에 필요한 유저 정보 모두 기입 후, 아바타 디자인 가능
 
 ### 일반 로그인
 
-<img src="./img/일반 로그인.gif" width="700">
+<img src="./img/normal_login.gif" width="700">
 
 - 회원가입한 아이디, 비밀번호로 로그인
 
 ### 소셜 로그인
 
-<img src="./img/소셜로그인.gif" width="700">
+<img src="./img/social_login.gif" width="700">
 
 - github 계정으로 로그인
 
 ### 회원 정보 수정
 
-<img src="./img/회원 정보 수정.gif" width="700">
+<img src="./img/modify_use.gif" width="700">
 
 - 회원가입 시 입력한 정보를 수정(이메일은 수정 불가) 하거나 확인 가능
 
 ### 회원 아바타 수정
 
-<img src="./img/회원 아바타 수정.gif" width="700">
+<img src="./img/modify_avatar.gif" width="700">
 
 - 회원가입 시 생성한 아바타를 수정하거나, github로그인 시 기본 아바타가 제공되는데 이를 수정 가능
 
 ### 메인 페이지
 
-<img src="./img/메인 페이지.gif" wdith="700">
+<img src="./img/mainPage.gif" wdith="700">
 
 - 해당 홈페이지 주인의 아바타, 닉네임, 잔디, 일촌평, 미니룸 등을 확인 가능
 - 로그인된 사용자의 스토리 확인 가능
 
 ### 메인 세부 - 스토리
 
-<img src="./img/스토리2.gif" width="700">
+<img src="./img/story.gif" width="700">
 
 - 로그인된 사용자와 일촌인 다른 사용자가 게시글을 작성하게 되면, 해당 시간으로부터 24시간 동안 게시글이 노출됨
 
 ### 메인 세부 - 파도타기
 
-<img src="./img/파도타기.gif" width="700">
+<img src="./img/surffing.gif" width="700">
 - 랜덤으로 추천되는 사용자의 페이지로 이동 가능
 
 ### 메인 세부 - 잔디
 
-<img src="./img/잔디.gif" width="700">
+<img src="./img/grass.gif" width="700">
 
 - 글을 많이 작성하면 작성할 수록 잔디의 색깔이 진해짐
 - 잔디를 눌러 그 날 작성한 게시글을 확인할 수 있고, 제목 클릭 시 해당 게시글로 이동 가능
 
 ### 메인 세부 - 일촌평
 
-<img src="./img/일촌평.gif" width="700">
+<img src="./img/family_comment.gif" width="700">
 
 - 홈페이지 주인과 일촌인 사람만이 일촌평을 작성 가능
 
 ### 게시글 조회
 
-<img src="./img/게시글 조회.gif" width="700">
+<img src="./img/board_read.gif" width="700">
 
 - 카테고리 별 게시글 조회 및 전체 게시글 조회 가능
 
@@ -345,14 +345,14 @@ FE
 
 ### Scrap
 
-<img src="./img/북마크.gif" width="700">
+<img src="./img/scrap.gif" width="700">
 
 - 모든 유저들이 작성한 게시글 scrap 가능
 - scrap한 게시글은 scrap 페이지 에서 조회 및 삭제 가능
 
 ### 커뮤니티
 
-<img src="./img/커뮤니티.gif" width="700">
+<img src="./img/community.gif" width="700">
 
 - 실시간 인기 검색어 10위를 확인 가능
 - 검색 이전에는 다른 사용자들이 작성한 모든 글들을 최신순으로 조회 가능
@@ -360,7 +360,7 @@ FE
 
 ### 방명록
 
-<img src="./img/방명록.gif" width="700">
+<img src="./img/guest_book.gif" width="700">
 
 - 누구나 작성 가능 (홈페이지 주인 제외)
 - 공개글/비밀글 설정 가능
@@ -368,26 +368,26 @@ FE
 
 ### 통계
 
-<img src="./img/통계.gif" width="700">
+<img src="./img/statistic.gif" width="700">
 
 - 주간 투데이 수, 포스팅한 게시글의 카테고리 별 퍼센트, 업적(좋아요 개수, 투데이 수, 포스팅 개수 등에 따라 달성 가능) 을 확인 가능
 
 ### 일촌 목록
 
-<img src="./img/일촌 목록.gif" width="700">
+<img src="./img/family_list.gif" width="700">
 
 - 현재 홈페이지의 주인과 일촌인 사용자들의 목록을 조회 가능
 
 ### 유저 검색
 
-<img src="./img/유저 검색.gif" width="700">
+<img src="./img/user_search.gif" width="700">
 
 - 사용자를 검색 가능
 - 이메일, 닉네임, 이름 중 필터링을 선택하여 검색 가능
 
 ### 알림
 
-<img src="./img/알림.gif" width="700">
+<img src="./img/alaram.gif" width="700">
 
 - 일촌 요청이 오거나, 일촌 수락이 되거나, 내 게시물에 누가 댓글을 달거나, 내 방명록에 누가 글을 남기면 알림 도착
 - 댓글이나 방명록 관련 알림의 경우 클릭 시 해당 게시글이나 방명록으로 이동 가능
