@@ -302,7 +302,7 @@ FE
 
 ### 메인 페이지
 
-<img src="./img/mainPage.gif" wdith="700">
+<img src="./img/mainPage.gif" width="700">
 
 - 해당 홈페이지 주인의 아바타, 닉네임, 잔디, 일촌평, 미니룸 등을 확인 가능
 - 로그인된 사용자의 스토리 확인 가능
