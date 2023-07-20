@@ -22,6 +22,25 @@ HelloWorld는 Github와 SNS 각각의 장점을 가져온 개발자 커뮤니티
 
 또, github의 잔디 심기와 같은 기능이나 통계 페이지를 통해 자신의 활동량을 한 눈에 볼 수 있도록 도와줍니다.
 
+### 😎팀원 역할
+
+- 배정현
+  - CI/CD
+  - Backend
+- 조현동
+  - 팀장
+  - Backend
+- 변유정
+  - UI/UX 디자인
+  - Frontend
+- 원송희
+  - UI/UX 디자인
+  - Frontend
+- 안영훈
+  - Backend
+- 서주광
+  - Backend
+
 ### 🛠주요 기능
 
 ### 미니홈피
@@ -243,24 +262,6 @@ FE
   - 간트차트 활용한 개발 계획 관리
   - 스토리 보드, 시퀀스 다이어그램, 기능 명세서 등 팀원 모두가 공유해야 하는 문서 관리
 
-### 😎팀원 역할
-
-- 조현동
-  - 팀장
-  - Backend
-- 변유정
-  - UI/UX 디자인
-  - Frontend
-- 배정현
-  - CI/CD
-  - Backend
-- 원송희
-  - UI/UX 디자인
-  - Frontend
-- 안영훈
-  - Backend
-- 서주광
-  - Backend
 
 ### 🎞기능 소개 및 화면
 
